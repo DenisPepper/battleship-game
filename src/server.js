@@ -18,7 +18,10 @@ io.on('connection', (socket) => {
     console.log('a user connected');
 
     socket.on('chat message', (msg) => {
-        console.log('message: ' + msg);
+        io.emit('chat message', msg);
+        
+        // отправка сообщения от конкретного сокета socket остальным клиентам 
+        //socket.broadcast.emit('chat message', msg); 
     });
 
     socket.on('disconnect', () => {
