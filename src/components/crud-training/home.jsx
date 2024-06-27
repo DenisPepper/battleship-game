@@ -42,26 +42,6 @@ export function Home() {
       });
 
     fetchCars(handleOnError, handleOnSuccess);
-
-    /*
-    const fetchCars = async () => {
-      const { data, error } = await api.from('cars').select();
-      if (error) {
-        dispatch({
-          type: Actions.onError,
-          payload: { error: error.message ?? 'on fetch data error!' },
-        });
-        console.log(error);
-      }
-      if (data) {
-        dispatch({
-          type: Actions.onSuccess,
-          payload: { cars: data },
-        });
-        console.log(data);
-      }
-    };
-    */
   }, [state.isLoading]);
 
   return (

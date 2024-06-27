@@ -12,3 +12,13 @@ export const fetchCars = async (onError, onSuccess) => {
 
     if (data) onSuccess(data)
 }
+
+export const addCars = async (onError, onSuccess, items) => {
+    const { data, error } = await supabase
+        .from('cars')
+        .insert(items).select()
+
+    if (error) onError(error);
+
+    if (data) onSuccess(data)
+}
