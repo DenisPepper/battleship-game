@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from 'react';
-import { supabaseClient as api } from '../../supabase/client';
+import { fetchCars } from '../../supabase/client';
 
 const Actions = {
   onStart: 'ON_START',
@@ -29,6 +29,21 @@ export function Home() {
   useEffect(() => {
     if (!state.isLoading) return;
 
+    const handleOnError = (error) =>
+      dispatch({
+        type: Actions.onError,
+        payload: { error: error.message ?? 'on fetch data error!' },
+      });
+
+    const handleOnSuccess = (data) =>
+      dispatch({
+        type: Actions.onSuccess,
+        payload: { cars: data },
+      });
+
+    fetchCars(handleOnError, handleOnSuccess);
+
+    /*
     const fetchCars = async () => {
       const { data, error } = await api.from('cars').select();
       if (error) {
@@ -46,8 +61,7 @@ export function Home() {
         console.log(data);
       }
     };
-
-    fetchCars();
+    */
   }, [state.isLoading]);
 
   return (
