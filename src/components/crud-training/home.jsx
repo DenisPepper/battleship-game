@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchCars } from '../../supabase/client';
 
@@ -7,6 +7,8 @@ const Actions = {
   onSuccess: 'ON_SUCCESS',
   onError: 'ON_ERROR',
 };
+
+const KEY = 'CARS';
 
 const reducer = (state, { type, payload }) => {
   if (type === Actions.onStart)
@@ -26,7 +28,13 @@ const initialState = {
 
 export function Home() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [cars, setCars] = useLocalStorage('CARS', []);
+
+  useEffect(() => {
+    dispatch({
+      type: Actions.onSuccess,
+      payload: { cars: JSON.parse(localStorage.getItem(KEY)) ?? [] },
+    });
+  }, []);
 
   useEffect(() => {
     if (!state.isLoading) return;
@@ -37,16 +45,17 @@ export function Home() {
         payload: { error: error.message ?? 'on fetch data error!' },
       });
 
-    const handleOnSuccess = (data) =>
+    const handleOnSuccess = (data) => {
       dispatch({
         type: Actions.onSuccess,
         payload: { cars: data },
       });
-
+      localStorage.setItem(KEY, JSON.stringify(data));
+    };
     fetchCars(handleOnError, handleOnSuccess);
   }, [state.isLoading]);
 
-  const carsList = state.cars.length > 0 ? state.cars : cars;
+  const carsList = state.cars;
 
   return (
     <div>
@@ -55,10 +64,7 @@ export function Home() {
         onClick={() => dispatch({ type: Actions.onStart })}
         disabled={state.isLoading}
       >
-        Загрузить список машин 🚗
-      </button>
-      <button type='button' onClick={() => setCars(state.cars)}>
-        Сохранить в браузере
+        {carsList.length > 0 ? 'Обновить' : 'Загрузить'} список машин 🚗
       </button>
       {state.isLoading && <p>Loading ...</p>}
       {state.error && <p>{state.error}</p>}
@@ -82,7 +88,7 @@ function CarsList({ cars }) {
               {car.isNew ? 'new' : 'secondhand'})
             </p>
             <Link
-              to={`/:${car.id}?brand=${car.brand}&color=${car.color}&isNew=${car.isNew}&price=${car.price}`}
+              to={`/${car.id}?brand=${car.brand}&color=${car.color}&isNew=${car.isNew}&price=${car.price}`}
             >
               <i>edit</i>
             </Link>
@@ -92,24 +98,3 @@ function CarsList({ cars }) {
     </>
   );
 }
-
-const useLocalStorage = (key, initialValue) => {
-  const [value, setValue] = useState(() => {
-    const localValue = localStorage.getItem(key);
-    if (localValue === null) {
-      return isFunc(initialValue) ? initialValue() : initialValue;
-    }
-    return JSON.parse(localValue);
-  });
-
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
-    //return () => localStorage.removeItem(key);
-  }, [value, key]);
-
-  return [value, setValue];
-};
-
-const isFunc = (obj) => {
-  return typeof obj === 'function';
-};
