@@ -30,9 +30,12 @@ export function Home() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    const cars = JSON.parse(localStorage.getItem(KEY));
+    if (!cars) return;
+
     dispatch({
       type: Actions.onSuccess,
-      payload: { cars: JSON.parse(localStorage.getItem(KEY)) ?? [] },
+      payload: { cars },
     });
   }, []);
 
