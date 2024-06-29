@@ -1,4 +1,5 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { fetchCars } from '../../supabase/client';
 
 const Actions = {
@@ -25,6 +26,7 @@ const initialState = {
 
 export function Home() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [cars, setCars] = useLocalStorage('CARS', []);
 
   useEffect(() => {
     if (!state.isLoading) return;
@@ -53,6 +55,9 @@ export function Home() {
       >
         Загрузить список машин 🚗
       </button>
+      <button type='button' onClick={() => setCars(state.cars)}>
+        Сохранить в браузере
+      </button>
       {state.isLoading && <p>Loading ...</p>}
       {state.error && <p>{state.error}</p>}
       {!!state.cars.length && <CarsList cars={state.cars} />}
@@ -66,12 +71,43 @@ function CarsList({ cars }) {
       <h2>Список машин:</h2>
       <ul>
         {cars.map((car) => (
-          <li key={car.id}>
-            car: {car.brand} / color: {car.color} / price: {car.price} (
-            {car.isNew ? 'new' : 'secondhand'})
+          <li
+            key={car.id}
+            style={{ border: '1px solid yellow', marginBottom: '10px' }}
+          >
+            <p>
+              car: {car.brand} / color: {car.color} / price: {car.price} (
+              {car.isNew ? 'new' : 'secondhand'})
+            </p>
+            <Link
+              to={`/:${car.id}?brand=${car.brand}&color=${car.color}&isNew=${car.isNew}&price=${car.price}`}
+            >
+              edit
+            </Link>
           </li>
         ))}
       </ul>
     </>
   );
 }
+
+const useLocalStorage = (key, initialValue) => {
+  const [value, setValue] = useState(() => {
+    const localValue = localStorage.getItem(key);
+    if (localValue === null) {
+      return isFunc(initialValue) ? initialValue() : initialValue;
+    }
+    return JSON.parse(localValue);
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+    return () => localStorage.removeItem(key);
+  }, [value, key]);
+
+  return [value, setValue];
+};
+
+const isFunc = (obj) => {
+  return typeof obj === 'function';
+};
