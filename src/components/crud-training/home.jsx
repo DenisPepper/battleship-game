@@ -46,6 +46,8 @@ export function Home() {
     fetchCars(handleOnError, handleOnSuccess);
   }, [state.isLoading]);
 
+  const carsList = state.cars.length > 0 ? state.cars : cars;
+
   return (
     <div>
       <button
@@ -60,7 +62,7 @@ export function Home() {
       </button>
       {state.isLoading && <p>Loading ...</p>}
       {state.error && <p>{state.error}</p>}
-      {!!state.cars.length && <CarsList cars={state.cars} />}
+      {!!carsList.length && <CarsList cars={carsList} />}
     </div>
   );
 }
@@ -73,7 +75,7 @@ function CarsList({ cars }) {
         {cars.map((car) => (
           <li
             key={car.id}
-            style={{ border: '1px solid yellow', marginBottom: '10px' }}
+            style={{ border: '1px solid white', marginBottom: '10px' }}
           >
             <p>
               car: {car.brand} / color: {car.color} / price: {car.price} (
@@ -82,7 +84,7 @@ function CarsList({ cars }) {
             <Link
               to={`/:${car.id}?brand=${car.brand}&color=${car.color}&isNew=${car.isNew}&price=${car.price}`}
             >
-              edit
+              <i>edit</i>
             </Link>
           </li>
         ))}
@@ -102,7 +104,7 @@ const useLocalStorage = (key, initialValue) => {
 
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(value));
-    return () => localStorage.removeItem(key);
+    //return () => localStorage.removeItem(key);
   }, [value, key]);
 
   return [value, setValue];

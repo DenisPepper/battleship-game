@@ -26,7 +26,7 @@ export function CarCard() {
       onSubmit={hendleOnSubmit}
       style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
     >
-      <h2>Редактирование элемента</h2>
+      <h2>{`Редактирование элемента c id ${id}`}</h2>
       <section
         style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
       >
