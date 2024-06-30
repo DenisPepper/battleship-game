@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 const apiUrl = import.meta.env.VITE_SUPABASE_URL;
 const apiKey = import.meta.env.VITE_SUPABASE_API_KEY;
 
-const supabase = createClient(apiUrl, apiKey);
+export const supabase = createClient(apiUrl, apiKey);
 
 export const fetchCars = async (onError, onSuccess) => {
   const { data, error } = await supabase.from('cars').select();
@@ -39,6 +39,20 @@ export const udateCarData = async (onError, onSuccess, item) => {
     .update({ ...item, id: undefined })
     .eq('id', item.id)
     .select();
+
+  if (error) onError(error);
+
+  if (data) onSuccess(data);
+};
+
+export const signInWithEmail = async (onError, onSuccess, authData) => {
+  /* 
+  {
+    email: 'example@email.com',
+    password: 'example-password',
+  }
+  */
+  const { data, error } = await supabase.auth.signInWithPassword(authData);
 
   if (error) onError(error);
 

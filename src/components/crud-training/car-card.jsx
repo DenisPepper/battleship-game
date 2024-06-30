@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { udateCarData } from '../../supabase/client';
 
-const KEY = 'CARS';
-
 export function CarCard() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -38,7 +36,6 @@ export function CarCard() {
       isNew: Boolean(data.get('isNew')),
       price: Number(data.get('price')),
     };
-    console.log(carData);
     udateCarData(onError, onSuccess, carData);
   };
 

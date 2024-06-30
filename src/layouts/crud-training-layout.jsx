@@ -17,13 +17,13 @@ export function CrudTrainingLayout() {
             <Link to='/'>🏠</Link>
           </li>
           <li>
+            <Link to='/auth'>auth</Link>
+          </li>
+          <li>
             <Link to='/create'>create</Link>
           </li>
           <li>
             <Link to='/read'>read</Link>
-          </li>
-          <li>
-            <Link to='/update'>update</Link>
           </li>
           <li>
             <Link to='/delete'>delete</Link>
