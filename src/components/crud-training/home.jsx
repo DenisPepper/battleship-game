@@ -72,6 +72,7 @@ export function Home() {
       {state.isLoading && <p>Loading ...</p>}
       {state.error && <p>{state.error}</p>}
       {!!carsList.length && <CarsList cars={carsList} />}
+      <Links />
     </div>
   );
 }
@@ -99,5 +100,38 @@ function CarsList({ cars }) {
         ))}
       </ul>
     </>
+  );
+}
+
+function Links() {
+  return (
+    <ul>
+      <li>
+        <a href='https://supabase.com/docs/guides/auth/passwords'>
+          supabase docs - EMAIL BASED AUTH
+        </a>
+      </li>
+      <li>
+        <a href='https://supabase.com/docs/guides/auth/signout'>
+          supabse docs - SIGN OUT{' '}
+        </a>
+      </li>
+      <li>
+        <a
+          href='https://youtu.be/Ow_Uzedfohk?list=PL5S4mPUpp4OvE6MLbO1xAMvKLKT1sFsHF'
+          target='_blank'
+        >
+          row level security
+        </a>
+      </li>
+      <li>
+        <a
+          href='https://youtu.be/_PLkhZ7q06o?list=PLl6EcvA_AoxEU455Yi1JoYVwHfpHpNkAw'
+          target='_blank'
+        >
+          auth play list
+        </a>
+      </li>
+    </ul>
   );
 }

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { signInWithEmail } from '../../supabase/client';
 
 export function Authentication() {
-  const [error, setError] = useState;
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
@@ -48,24 +48,7 @@ export function Authentication() {
       </section>
       <section>{error && <span>{error}</span>}</section>
       <footer>
-        <ul>
-          <li>
-            <a
-              href='https://youtu.be/Ow_Uzedfohk?list=PL5S4mPUpp4OvE6MLbO1xAMvKLKT1sFsHF'
-              target='_blank'
-            >
-              https://youtu.be/Ow_Uzedfohk?list=PL5S4mPUpp4OvE6MLbO1xAMvKLKT1sFsHF
-            </a>
-          </li>
-          <li>
-            <a
-              href='https://youtu.be/_PLkhZ7q06o?list=PLl6EcvA_AoxEU455Yi1JoYVwHfpHpNkAw'
-              target='_blank'
-            >
-              https://youtu.be/_PLkhZ7q06o?list=PLl6EcvA_AoxEU455Yi1JoYVwHfpHpNkAw
-            </a>
-          </li>
-        </ul>
+        
       </footer>
     </form>
   );

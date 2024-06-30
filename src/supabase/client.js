@@ -58,3 +58,8 @@ export const signInWithEmail = async (onError, onSuccess, authData) => {
 
   if (data) onSuccess(data);
 };
+
+export const signOut = async (onError) => {
+  const { error } = await supabase.auth.signOut();
+  onError(error);
+};

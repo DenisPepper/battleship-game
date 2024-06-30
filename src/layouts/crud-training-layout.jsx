@@ -1,17 +1,34 @@
+import { useState } from 'react';
 import {
   Link,
   Outlet,
   ScrollRestoration,
   useNavigation,
 } from 'react-router-dom';
+import { signOut } from '../supabase/client';
 
 export function CrudTrainingLayout() {
   const { state } = useNavigation();
+  const [error, setError] = useState('');
+
+  const onError = (error) => {
+    if (error) {
+      setError(error.message ?? 'error on sigb out');
+      return;
+    }
+
+    alert('you logged out');
+  };
+
+  const handleSignOut = () => {
+    signOut(onError);
+  };
 
   return (
     <>
       <h1>Тренировка crud-операций на supabase</h1>
-      <nav>
+      {error && <span>{error}</span>}
+      <nav style={{ display: 'flex', gap: '20px' }}>
         <ul style={{ display: 'flex', listStyle: 'none', gap: '20px' }}>
           <li>
             <Link to='/'>🏠</Link>
@@ -29,6 +46,9 @@ export function CrudTrainingLayout() {
             <Link to='/delete'>delete</Link>
           </li>
         </ul>
+        <button type='button' onClick={handleSignOut}>
+          Sign out
+        </button>
       </nav>
       <ScrollRestoration />
       <div>{state === 'loading' ? <div>Loading...</div> : <Outlet />}</div>
