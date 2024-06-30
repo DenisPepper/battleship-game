@@ -31,10 +31,15 @@ export function CrudTrainingLayout() {
       <nav style={{ display: 'flex', gap: '20px' }}>
         <ul style={{ display: 'flex', listStyle: 'none', gap: '20px' }}>
           <li>
-            <Link to='/'>🏠</Link>
+            <Link style={{ fontSize: '24px' }} to='/'>
+              🏠
+            </Link>
           </li>
           <li>
             <Link to='/auth'>auth</Link>
+          </li>
+          <li>
+            <Link to='/signup'>signup</Link>
           </li>
           <li>
             <Link to='/create'>create</Link>

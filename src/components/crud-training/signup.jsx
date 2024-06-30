@@ -1,33 +1,26 @@
-import { useState, useLayoutEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { signInWithEmail } from '../../supabase/client';
+import { useState } from 'react';
+import { signUpNewUser } from '../../supabase/client';
 
-export function Authentication() {
+export function Signup() {
   const [error, setError] = useState('');
-  const navigate = useNavigate();
-
-  useLayoutEffect(() => {
-    const auth = localStorage.getItem('sb-vjschmwmhttjrxfcglgl-auth-token');
-    if (auth) navigate('/');
-  }, [navigate]);
 
   const onError = (error) => {
     setError(error.message ?? 'error on sign in!');
   };
 
   const onSuccess = (data) => {
-    navigate('/');
+    if (data) alert('please, check your email address');
   };
 
   const onSubmit = (evt) => {
     evt.preventDefault();
     const data = new FormData(evt.currentTarget);
-    const authData = {
+    const userData = {
       email: data.get('email'),
       password: data.get('password'),
     };
 
-    signInWithEmail(onError, onSuccess, authData);
+    signUpNewUser(onError, onSuccess, userData);
   };
 
   return (

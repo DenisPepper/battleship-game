@@ -45,13 +45,33 @@ export const udateCarData = async (onError, onSuccess, item) => {
   if (data) onSuccess(data);
 };
 
-export const signInWithEmail = async (onError, onSuccess, authData) => {
+export const signUpNewUser = async (onError, onSuccess, userData) => {
   /* 
+  
   {
     email: 'example@email.com',
     password: 'example-password',
+    options: {
+      emailRedirectTo: 'https://example.com/welcome',
+    },
   }
+
   */
+
+  const { data, error } = await supabase.auth.signUp(userData);
+
+  if (error) onError(error);
+
+  if (data) onSuccess(data);
+};
+
+/**
+ * Sign in
+ * @param {function} onError - callback in case of an error
+ * @param {function} onSuccess - callback in case of an success
+ * @param {object} authData - object {email: '', password: '',}
+ */
+export const signInWithEmail = async (onError, onSuccess, authData) => {
   const { data, error } = await supabase.auth.signInWithPassword(authData);
 
   if (error) onError(error);

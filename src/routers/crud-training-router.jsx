@@ -6,6 +6,7 @@ import { Read } from '../components/crud-training/read';
 import { Delete } from '../components/crud-training/delete';
 import { CarCard } from '../components/crud-training/car-card';
 import { Authentication } from '../components/crud-training/auth';
+import { Signup } from '../components/crud-training/signup';
 
 export const crudTrainingRouter = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ export const crudTrainingRouter = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: '*', element: <Navigate to='/' /> },
       { path: 'create', element: <Create /> },
+      { path: 'signup', element: <Signup /> },
       { path: 'read', element: <Read /> },
       { path: 'auth', element: <Authentication /> },
       { path: 'delete', element: <Delete /> },
