@@ -126,10 +126,15 @@ function Links() {
       </li>
       <li>
         <a
-          href='https://youtu.be/_PLkhZ7q06o?list=PLl6EcvA_AoxEU455Yi1JoYVwHfpHpNkAw'
-          target='_blank'
+          href='https://supabase.com/docs/guides/database/postgres/custom-claims-and-role-based-access-control-rbac'
+          target='blank'
         >
-          auth play list
+          Custom Claims & Role-based Access Control (RBAC)
+        </a>
+      </li>
+      <li>
+        <a href='https://youtu.be/A--UI93tGbM' target='blank'>
+          Role-Based Authorization Tutorial
         </a>
       </li>
     </ul>
