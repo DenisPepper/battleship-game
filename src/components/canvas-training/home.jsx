@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState } from 'react';
+import { useRef, useCallback, useState, useEffect } from 'react';
 
 import './home.css';
 
@@ -16,6 +16,16 @@ export function Home() {
     }
 
     setIsAvailable(false);
+  }, []);
+
+  useEffect(() => {
+    const ctx = ctxRef.current;
+
+    ctx.fillStyle = 'rgb(200 0 0)';
+    ctx.fillRect(10, 10, 50, 50);
+
+    ctx.fillStyle = 'rgb(0 0 200 / 50%)';
+    ctx.fillRect(30, 30, 50, 50);
   }, []);
 
   if (!isAvailable) return <div>Your browser do not support canvas API!</div>;
