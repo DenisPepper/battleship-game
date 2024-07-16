@@ -1,14 +1,24 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState } from 'react';
 
 import './home.css';
 
 export function Home() {
+  const [isAvailable, setIsAvailable] = useState(true);
+
   const ctxRef = useRef();
 
   const canvasRef = useCallback((canvas) => {
     if (canvas === null) return;
-    ctxRef.current = canvas.getContext('2d');
+
+    if (canvas.getContext) {
+      ctxRef.current = canvas.getContext('2d');
+      return;
+    }
+
+    setIsAvailable(false);
   }, []);
+
+  if (!isAvailable) return <div>Your browser do not support canvas API!</div>;
 
   return (
     <canvas
