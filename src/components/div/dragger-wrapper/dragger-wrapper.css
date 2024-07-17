@@ -1,4 +1,5 @@
 .dragger-wrapper {
   display: grid;
-  grid-template-columns: auto 20%;
+  grid-template-columns: auto max-content;
+  justify-content: center;
 }
