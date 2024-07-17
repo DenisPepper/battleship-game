@@ -1,0 +1,10 @@
+.dragger {
+  position: relative;
+  background-color: blanchedalmond;
+}
+
+.dragger__vertical {
+  position: absolute;
+  background-color: brown;
+  cursor: grab;
+}
