@@ -1,9 +1,12 @@
 .dragger__wall {
   position: absolute;
   background-color: gold;
-  cursor: grab;
 }
 
-.dragger__wall--dragged {
-  cursor: grabbing;
+.dragger__wall--vertical {
+  cursor: e-resize;
+}
+
+.dragger__wall--horizontal {
+  cursor: ns-resize;
 }

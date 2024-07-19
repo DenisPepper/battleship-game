@@ -21,8 +21,6 @@ export function Wall(props) {
     // удаляет перегородку
   };
 
-  const handleDrag = (evt) => {};
-
   const handleDragEnd = (evt) => {
     const { clientY, clientX } = evt;
     if (orientation === 'vertical')
@@ -33,10 +31,9 @@ export function Wall(props) {
 
   return (
     <div
-      className='dragger__wall'
+      className={`dragger__wall dragger__wall--${orientation}`}
       style={style}
       onDoubleClick={handleDoubleClick}
-      onDrag={handleDrag}
       onDragEnd={handleDragEnd}
     ></div>
   );
