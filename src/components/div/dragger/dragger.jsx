@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { DraggerWrapper } from '../dragger-wrapper/dragger-wrapper.jsx';
 import { Area } from '../area/area.jsx';
+import { Wall } from '../wall/wall.jsx';
 import { ContextMenu } from '../context-menu/context-menu.jsx';
 import {
   DRAGGER_HEIGHT,
@@ -49,14 +50,13 @@ export function Dragger() {
 
     /* если драгер содержит активную область, и идентификатор активной области НЕ совпадает
     с идентификатором области, которая поймала клик, то это значит, что пользователь выбрал другую активную область,
-    обработчик заменит в драгере предыдующую область на новую и удалит стили выделения старой области */
+    обработчик удалит стили выделения старой области */
     if (activeArea && activeArea.id !== area.id) {
+      console.log(2, activeArea.id, area.id);
       activeArea.removeSelection();
       setIsOpenCtxMenu(false);
     }
 
-    // TODO: обработать кейс, когда в драгере есть несколько областей
-    // одна из всех активная, при клике на другую, активной становится новая область
     setActiveArea({
       ...areas.filter((item) => item.id === area.id).at(0),
       removeSelection: area.removeSelection,
@@ -140,7 +140,9 @@ export function Dragger() {
     setIsOpenCtxMenu(true);
   };
 
-  const handleCtxMenuClose = () => setIsOpenCtxMenu(false);
+  const handleCtxMenuClose = () => {
+    setIsOpenCtxMenu(false);
+  };
 
   const handleCtxMenuAddItem = (key) => {
     handleCtxMenuClose();
@@ -175,10 +177,10 @@ export function Dragger() {
           />
         ))}
         {verticals.map((item) => (
-          <div
-            className='dragger__vertical'
+          <Wall
             key={item.id}
-            style={{
+            id={item.id}
+            rect={{
               width: item.width,
               height: item.height,
               top: item.top,
@@ -187,10 +189,10 @@ export function Dragger() {
           />
         ))}
         {horizontals.map((item) => (
-          <div
-            className='dragger__horizontal'
+          <Wall
             key={item.id}
-            style={{
+            id={item.id}
+            rect={{
               width: item.width,
               height: item.height,
               top: item.top,

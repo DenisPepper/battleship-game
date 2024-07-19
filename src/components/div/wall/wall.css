@@ -1,0 +1,5 @@
+.dragger__wall {
+  position: absolute;
+  background-color: gold;
+  cursor: grab;
+}

@@ -1,32 +1,4 @@
 .dragger {
   position: relative;
-  background-color: rgb(172, 158, 158);
+  /*background-color: rgb(172, 158, 158);*/
 }
-
-.dragger__vertical,
-.dragger__horizontal {
-  position: absolute;
-  background-color: gold;
-  cursor: grab;
-}
-
-.dragger__area {
-  position: absolute;
-  background-color: blanchedalmond;
-}
-
-.dragger__area--active {
-  background-color: rgb(225, 183, 120);
-}
-
-/*
-.dragger__area:hover {
-  background-color: rgb(225, 183, 120);
-}
-*/
-
-/*
-.dragger__area--used:hover {
-  background-color: blanchedalmond;
-}
-  */
