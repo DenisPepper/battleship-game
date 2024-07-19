@@ -18,6 +18,7 @@ export const createAreaAfter = (area, id, width, pThickness) => ({
 
 export const createNewVertical = (area, id, pThickness, width) => ({
   id,
+  orientation: 'vertical', 
   width: pThickness,
   height: area.height,
   top: area.top,

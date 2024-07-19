@@ -3,3 +3,7 @@
   background-color: gold;
   cursor: grab;
 }
+
+.dragger__wall--dragged {
+  cursor: grabbing;
+}

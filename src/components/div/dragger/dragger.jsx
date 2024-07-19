@@ -101,6 +101,7 @@ export function Dragger() {
     };
     const newHorisontal = {
       id: nextHorisontalID,
+      orientation: 'horizontal',
       width: activeArea.width,
       height: INNER_THICKNESS,
       top: activeArea.top + height,
@@ -153,6 +154,21 @@ export function Dragger() {
     setIsOpenCtxMenu(false);
   };
 
+  const handleMoveWall = (id, orientation, shift) => {
+    if (orientation === 'horizontal') {
+      console.log('horizontal');
+      const cb = (items) =>
+        items.map((item) => (item.id === id ? { ...item, top: shift } : item));
+      setHorizontals(cb);
+    }
+
+    if (orientation === 'vertical') {
+      const cb = (items) =>
+        items.map((item) => (item.id === id ? { ...item, left: shift } : item));
+      setVerticals(cb);
+    }
+  };
+
   return (
     <section className='dragger-wrapper'>
       <div
@@ -184,6 +200,10 @@ export function Dragger() {
           <Wall
             key={item.id}
             id={item.id}
+            orientation={item.orientation}
+            moveWall={handleMoveWall}
+            parentTop={draggerRef.current.rect.top}
+            parentLeft={draggerRef.current.rect.left}
             rect={{
               width: item.width,
               height: item.height,
@@ -196,6 +216,10 @@ export function Dragger() {
           <Wall
             key={item.id}
             id={item.id}
+            orientation={item.orientation}
+            moveWall={handleMoveWall}
+            parentTop={draggerRef.current.rect.top}
+            parentLeft={draggerRef.current.rect.left}
             rect={{
               width: item.width,
               height: item.height,
