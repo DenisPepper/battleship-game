@@ -33,7 +33,6 @@ export function Dragger() {
 
   const handleRefSetup = useCallback((dragger) => {
     draggerRef.current = {
-      //element: dragger,
       rect: dragger.getBoundingClientRect(),
     };
   }, []);
