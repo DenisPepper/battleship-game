@@ -15,3 +15,13 @@ export const createAreaAfter = (area, id, width, pThickness) => ({
   left: area.left + width + pThickness,
   width,
 });
+
+export const createNewVertical = (area, id, pThickness, width) => ({
+  id,
+  width: pThickness,
+  height: area.height,
+  top: area.top,
+  left: area.left + width,
+});
+
+// TODO: переписать на класс DraggerManager

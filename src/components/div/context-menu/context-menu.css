@@ -1,0 +1,11 @@
+.dragger__ctx-menu {
+  min-width: max-content;
+  margin: 0;
+  border: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: 10;
+  outline: 1px solid black;
+}

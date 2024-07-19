@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { DraggerWrapper } from '../dragger-wrapper/dragger-wrapper.jsx';
 import { Area } from '../area/area.jsx';
 import { ContextMenu } from '../context-menu/context-menu.jsx';
@@ -6,46 +6,17 @@ import {
   DRAGGER_HEIGHT,
   DRAGGER_WIDTH,
   INNER_THICKNESS,
+  INITIAL_AREA,
+  INITIAL_ID,
+  INITIAL_NEXT_AREA_ID,
 } from '../dragger-config.js';
 import {
   reduceArea,
   createAreaBefore,
   createAreaAfter,
+  createNewVertical,
 } from '../dragger-util.js';
 import './dragger.css';
-
-const INITIAL_ID = 1;
-
-const INITIAL_NEXT_AREA_ID = 2;
-
-const INITIAL_AREA = {
-  id: INITIAL_ID,
-  top: 0,
-  left: 0,
-  width: DRAGGER_WIDTH,
-  height: DRAGGER_HEIGHT,
-};
-
-const INITIAL_CTX_MENU = {
-  positionX: 0,
-  positionY: 0,
-  isToggled: false,
-  buttons: [
-    {
-      text: 'add vertical splitting',
-      icon: '🔝',
-      onClick: () => alert(this.text),
-      isSpacer: false,
-    },
-    { text: '', icon: '', onClick: null, isSpacer: true },
-    {
-      text: 'add horizontal splitting',
-      icon: '😡',
-      onClick: () => alert(this.text),
-      isSpacer: false,
-    },
-  ],
-};
 
 export function Dragger() {
   const [areas, setAreas] = useState([INITIAL_AREA]);
@@ -55,20 +26,44 @@ export function Dragger() {
   const [nextVerticalID, setNextVerticalID] = useState(INITIAL_ID);
   const [horizontals, setHorizontals] = useState([]);
   const [nextHorisontalID, setNextHorizontalID] = useState(INITIAL_ID);
-  const [contextMenu, setContextMenu] = useState(INITIAL_CTX_MENU);
-  const ctxRef = useRef(null);
+  const [isOpenCtxMenu, setIsOpenCtxMenu] = useState(false);
+  const [ctxMenuCoords, setCtxMenuCoords] = useState({ x: 0, y: 0 });
+  const draggerRef = useRef(null);
 
-  const handleAreaMouseEvents = (key, id) => {
-    if (key === 'setup')
-      setActiveArea(areas.filter((item) => item.id === id).at(0));
+  const handleRefSetup = useCallback((dragger) => {
+    draggerRef.current = {
+      element: dragger,
+      rect: dragger.getBoundingClientRect(),
+    };
+  }, []);
 
-    if (key === 'drop') setActiveArea(null);
+  const handleAreaMouseEvents = (area) => {
+    /* если драгер содержит активную область, и идентификатор активной области совпадает
+    с идентификатором области, которая поймала клик, то это значит, что пользователь повторно кликнул на активную область,
+    обработчик удалит эту область из драгера */
+    if (activeArea && activeArea.id === area.id) {
+      setActiveArea(null);
+      setIsOpenCtxMenu(false);
+      return;
+    }
+
+    /* если драгер содержит активную область, и идентификатор активной области НЕ совпадает
+    с идентификатором области, которая поймала клик, то это значит, что пользователь выбрал другую активную область,
+    обработчик заменит в драгере предыдующую область на новую и удалит стили выделения старой области */
+    if (activeArea && activeArea.id !== area.id) {
+      activeArea.removeSelection();
+      setIsOpenCtxMenu(false);
+    }
+
+    // TODO: обработать кейс, когда в драгере есть несколько областей
+    // одна из всех активная, при клике на другую, активной становится новая область
+    setActiveArea({
+      ...areas.filter((item) => item.id === area.id).at(0),
+      removeSelection: area.removeSelection,
+    });
   };
-  /*
-  const handleVerticalSplitting = (evt) => {
-    evt.preventDefault();
-    //evt.target.classList.toggle('dragger__area--used');
 
+  const handleVerticalSplitting = () => {
     const width = reduceArea(activeArea.width, INNER_THICKNESS);
     const newAreaBefore = createAreaBefore(activeArea, nextAreaID, width);
     const newAreaAfter = createAreaAfter(
@@ -77,13 +72,12 @@ export function Dragger() {
       width,
       INNER_THICKNESS
     );
-    const newVertical = {
-      id: nextVerticalID,
-      width: INNER_THICKNESS,
-      height: activeArea.height,
-      top: activeArea.top,
-      left: activeArea.left + width,
-    };
+    const newVertical = createNewVertical(
+      activeArea,
+      nextVerticalID,
+      INNER_THICKNESS,
+      width
+    );
     setAreas((areas) => [
       ...areas.filter((area) => area.id !== activeArea.id),
       newAreaBefore,
@@ -95,19 +89,16 @@ export function Dragger() {
     setActiveArea(null);
   };
 
-  const handleHorizontalSplitting = (evt) => {
-    console.log('click on devider!');
-    evt.preventDefault();
-    return;
-    
+  const handleHorizontalSplitting = () => {
     const height = reduceArea(activeArea.height, INNER_THICKNESS);
     const newAreaOver = {
       ...activeArea,
+      id: nextAreaID,
       height,
     };
     const newAreaUnder = {
       ...activeArea,
-      id: nextAreaID,
+      id: nextAreaID + 1,
       top: activeArea.top + height + INNER_THICKNESS,
       height,
     };
@@ -124,27 +115,54 @@ export function Dragger() {
       newAreaUnder,
     ]);
     setHorizontals((items) => [...items, newHorisontal]);
-    setNextAreaID((id) => id + 1);
+    setNextAreaID((id) => id + 2);
     setNextHorizontalID((id) => id + 1);
     setActiveArea(null);
-   
   };
- */
 
   const handleOnContextMenu = (evt) => {
     evt.preventDefault();
 
-    const ctxMenuRect = ctxRef.current.getBoundingClientRect();
+    if (!activeArea) return;
+
+    const { x: parentX, y: parentY } = draggerRef.current.rect;
+    const coords = {
+      x: evt.clientX - parentX,
+      y: evt.clientY - parentY,
+    };
+
+    if (isOpenCtxMenu) {
+      setCtxMenuCoords(coords);
+      return;
+    }
+
+    setCtxMenuCoords(coords);
+    setIsOpenCtxMenu(true);
+  };
+
+  const handleCtxMenuClose = () => setIsOpenCtxMenu(false);
+
+  const handleCtxMenuAddItem = (key) => {
+    handleCtxMenuClose();
+    if (key === 'vertical') handleVerticalSplitting();
+    if (key === 'horizontal') handleHorizontalSplitting();
   };
 
   return (
     <DraggerWrapper>
-      <ContextMenu contextMenuRef={ctxRef} {...INITIAL_CTX_MENU} />
       <div
         className='dragger'
         style={{ width: DRAGGER_WIDTH, height: DRAGGER_HEIGHT }}
         onContextMenu={handleOnContextMenu}
+        ref={handleRefSetup}
       >
+        {isOpenCtxMenu && (
+          <ContextMenu
+            closeMenu={handleCtxMenuClose}
+            addItem={handleCtxMenuAddItem}
+            coords={ctxMenuCoords}
+          />
+        )}
         {areas.map((item) => (
           <Area
             key={item.id}

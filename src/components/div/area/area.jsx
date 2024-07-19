@@ -18,8 +18,13 @@ export function Area(props) {
   const handleMouseClick = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-    handleMouseEvents('setup', id);
+
     evt.target.classList.toggle('dragger__area--active');
+
+    const removeSelection = () =>
+      evt.target.classList.remove('dragger__area--active');
+
+    handleMouseEvents({ id, removeSelection });
   };
 
   return (

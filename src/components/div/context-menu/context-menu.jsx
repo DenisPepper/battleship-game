@@ -1,41 +1,22 @@
 import './context-menu.css';
 
 export function ContextMenu(props) {
-  const {
-    rightClickItem,
-    positionX,
-    positionY,
-    isToggled,
-    buttons,
-    contextMenuRef,
-  } = props;
+  const { coords, closeMenu, addItem } = props;
 
   return (
     <menu
-      className={`ctx-menu ${isToggled && 'active'}`}
-      ref={contextMenuRef}
-      style={{ top: positionY, left: positionX }}
+      className='dragger__ctx-menu'
+      style={{ top: coords.y, left: coords.x }}
     >
-      {buttons.map((button, index) => {
-        const handleClick = (evt) => {
-          evt.stopPropagation();
-          button.onClick(evt, rightClickItem);
-        };
-
-        if (button.isSpacer) return <hr key={index} />;
-
-        return (
-          <button
-            className='ctx-menu__button'
-            type='button'
-            onClick={handleClick}
-            key={button.text}
-          >
-            <span>{button.text}</span>
-            <span className='ctx-munu__icon'>{button.icon}</span>
-          </button>
-        );
-      })}
+      <button type='button' onClick={() => addItem('vertical')}>
+        Вертикальная перегородка
+      </button>
+      <button type='button' onClick={() => addItem('horizontal')}>
+        Горизонтальная перегородка
+      </button>
+      <button type='button' onClick={closeMenu}>
+        ❌
+      </button>
     </menu>
   );
 }
