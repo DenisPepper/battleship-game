@@ -18,9 +18,6 @@ export function ContextMenu(props) {
       <button type='button' onClick={() => addItem('horizontal')}>
         Горизонтальная перегородка
       </button>
-      <button type='button' onClick={closeMenu}>
-        ❌
-      </button>
     </menu>
   );
 }

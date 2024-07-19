@@ -1,5 +1,4 @@
 import { useCallback, useRef, useState } from 'react';
-import { DraggerWrapper } from '../dragger-wrapper/dragger-wrapper.jsx';
 import { Area } from '../area/area.jsx';
 import { Wall } from '../wall/wall.jsx';
 import { ContextMenu } from '../context-menu/context-menu.jsx';
@@ -155,7 +154,7 @@ export function Dragger() {
   };
 
   return (
-    <DraggerWrapper>
+    <section className='dragger-wrapper'>
       <div
         className='dragger'
         style={{ width: DRAGGER_WIDTH, height: DRAGGER_HEIGHT }}
@@ -206,6 +205,6 @@ export function Dragger() {
           />
         ))}
       </div>
-    </DraggerWrapper>
+    </section>
   );
 }
