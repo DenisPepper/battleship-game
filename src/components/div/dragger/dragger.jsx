@@ -33,7 +33,7 @@ export function Dragger() {
 
   const handleRefSetup = useCallback((dragger) => {
     draggerRef.current = {
-      element: dragger,
+      //element: dragger,
       rect: dragger.getBoundingClientRect(),
     };
   }, []);
@@ -52,7 +52,6 @@ export function Dragger() {
     с идентификатором области, которая поймала клик, то это значит, что пользователь выбрал другую активную область,
     обработчик удалит стили выделения старой области */
     if (activeArea && activeArea.id !== area.id) {
-      console.log(2, activeArea.id, area.id);
       activeArea.removeSelection();
       setIsOpenCtxMenu(false);
     }
@@ -150,12 +149,19 @@ export function Dragger() {
     if (key === 'horizontal') handleHorizontalSplitting();
   };
 
+  const handleMouseLeave = () => {
+    if (activeArea) activeArea.removeSelection();
+    setActiveArea(null);
+    setIsOpenCtxMenu(false);
+  };
+
   return (
     <DraggerWrapper>
       <div
         className='dragger'
         style={{ width: DRAGGER_WIDTH, height: DRAGGER_HEIGHT }}
         onContextMenu={handleOnContextMenu}
+        onMouseLeave={handleMouseLeave}
         ref={handleRefSetup}
       >
         {isOpenCtxMenu && (
