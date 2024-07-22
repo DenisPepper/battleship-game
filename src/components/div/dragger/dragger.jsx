@@ -156,7 +156,6 @@ export function Dragger() {
 
   const handleMoveWall = (id, orientation, shift) => {
     if (orientation === 'horizontal') {
-      console.log('horizontal');
       const cb = (items) =>
         items.map((item) => (item.id === id ? { ...item, top: shift } : item));
       setHorizontals(cb);
@@ -201,6 +200,7 @@ export function Dragger() {
             key={item.id}
             id={item.id}
             orientation={item.orientation}
+            pShift={INNER_THICKNESS / 2}
             moveWall={handleMoveWall}
             parentTop={draggerRef.current.rect.top}
             parentLeft={draggerRef.current.rect.left}
@@ -217,6 +217,7 @@ export function Dragger() {
             key={item.id}
             id={item.id}
             orientation={item.orientation}
+            pShift={INNER_THICKNESS / 2}
             moveWall={handleMoveWall}
             parentTop={draggerRef.current.rect.top}
             parentLeft={draggerRef.current.rect.left}
