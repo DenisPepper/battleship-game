@@ -154,17 +154,33 @@ export function Dragger() {
     setIsOpenCtxMenu(false);
   };
 
-  const handleMoveWall = (id, orientation, shift) => {
+  const handleMoveWall = ({ id, orientation, coordinate: coord }) => {
     if (orientation === 'horizontal') {
       const cb = (items) =>
-        items.map((item) => (item.id === id ? { ...item, top: shift } : item));
+        items.map((item) => (item.id === id ? { ...item, top: coord } : item));
+
       setHorizontals(cb);
+
+      let direction = 'no-move';
+      if (coord > draggerRef.current.lastTop) direction = 'down';
+      if (coord < draggerRef.current.lastTop) direction = 'up';
+      if (direction === 'no-move')
+        direction = draggerRef.current.lastDirection ?? direction;
+      draggerRef.current.lastDirection = direction;
     }
 
     if (orientation === 'vertical') {
       const cb = (items) =>
-        items.map((item) => (item.id === id ? { ...item, left: shift } : item));
+        items.map((item) => (item.id === id ? { ...item, left: coord } : item));
+
       setVerticals(cb);
+
+      let direction = 'no-move';
+      if (coord > draggerRef.current.lastLeft) direction = 'right';
+      if (coord < draggerRef.current.lastLeft) direction = 'left';
+      if (direction === 'no-move')
+        direction = draggerRef.current.lastDirection ?? direction;
+      draggerRef.current.lastDirection = direction;
     }
   };
 
@@ -202,6 +218,7 @@ export function Dragger() {
             orientation={item.orientation}
             pShift={INNER_THICKNESS / 2}
             moveWall={handleMoveWall}
+            draggerRef={draggerRef.current}
             parentTop={draggerRef.current.rect.top}
             parentLeft={draggerRef.current.rect.left}
             rect={{
@@ -219,6 +236,7 @@ export function Dragger() {
             orientation={item.orientation}
             pShift={INNER_THICKNESS / 2}
             moveWall={handleMoveWall}
+            draggerRef={draggerRef.current}
             parentTop={draggerRef.current.rect.top}
             parentLeft={draggerRef.current.rect.left}
             rect={{

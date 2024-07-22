@@ -3,6 +3,10 @@
   background-color: gold;
 }
 
+.dragger__wall--moving {
+  opacity: 0.5;
+}
+
 .dragger__wall--vertical {
   cursor: e-resize;
 }

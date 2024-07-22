@@ -3,6 +3,7 @@ import './wall.css';
 
 export function Wall(props) {
   const {
+    draggerRef,
     rect: { width, height, top, left },
     id,
     orientation,
@@ -21,22 +22,36 @@ export function Wall(props) {
 
   const wallRef = useRef();
 
+  orientation === 'horizontal' && (draggerRef.lastTop = top);
+
+  orientation === 'vertical' && (draggerRef.lastLeft = left);
+
   useEffect(() => {
     const wall = wallRef.current;
 
     const handleMouseMove = (evt) => {
       const { clientY: y, clientX: x } = evt;
       if (orientation === 'vertical')
-        moveWall(id, orientation, x - parentLeft - pShift);
+        moveWall({
+          id,
+          orientation,
+          coordinate: x - parentLeft - pShift,
+        });
       if (orientation === 'horizontal')
-        moveWall(id, orientation, y - parentTop - pShift);
+        moveWall({
+          id,
+          orientation,
+          coordinate: y - parentTop - pShift,
+        });
     };
 
     const handleMouseDown = () => {
+      wall.classList.add('dragger__wall--moving');
       wall.addEventListener('mousemove', handleMouseMove);
     };
 
     const handleMouseUp = () => {
+      wall.classList.remove('dragger__wall--moving');
       wall.removeEventListener('mousemove', handleMouseMove);
     };
 
