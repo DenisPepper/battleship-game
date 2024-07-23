@@ -10,13 +10,10 @@ import {
   INITIAL_ID,
   INITIAL_NEXT_AREA_ID,
 } from '../dragger-config.js';
-import {
-  reduceArea,
-  createAreaBefore,
-  createAreaAfter,
-  createNewVertical,
-} from '../dragger-util.js';
+import { DividerManager } from '../dragger-util.js';
 import './dragger.css';
+
+const manager = new DividerManager({ panelThickness: INNER_THICKNESS });
 
 export function Dragger() {
   const [areas, setAreas] = useState([INITIAL_AREA]);
@@ -61,26 +58,23 @@ export function Dragger() {
   };
 
   const handleVerticalSplitting = () => {
-    const width = reduceArea(activeArea.width, INNER_THICKNESS);
-    const newAreaBefore = createAreaBefore(activeArea, nextAreaID, width);
-    const newAreaAfter = createAreaAfter(
-      activeArea,
-      nextAreaID + 1,
-      width,
-      INNER_THICKNESS
-    );
-    const newVertical = createNewVertical(
-      activeArea,
-      nextVerticalID,
-      INNER_THICKNESS,
-      width
-    );
+    const [areaBefore, areaAfter, verticalPanel] =
+      manager.splitInHalfByVerticalPartition({
+        niche: activeArea,
+        idBefor: nextAreaID,
+        idAfter: nextAreaID + 1,
+        idPartition: nextVerticalID,
+        splitting: 'vertical',
+      });
+
+    //console.log(areaBefore, areaAfter, verticalPanel)
+
     setAreas((areas) => [
       ...areas.filter((area) => area.id !== activeArea.id),
-      newAreaBefore,
-      newAreaAfter,
+      areaBefore,
+      areaAfter,
     ]);
-    setVerticals((items) => [...items, newVertical]);
+    setVerticals((items) => [...items, verticalPanel]);
     setNextAreaID((id) => id + 2);
     setNextVerticalID((id) => id + 1);
     setActiveArea(null);

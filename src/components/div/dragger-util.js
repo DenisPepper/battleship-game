@@ -25,9 +25,57 @@ export const createNewVertical = (area, id, pThickness, width) => ({
   left: area.left + width,
 });
 
-// TODO: переписать на класс DraggerManager
+export class DividerManager {
+  thickness = null;
 
-export class Partition {
+  constructor({ panelThickness }) {
+    this.thickness = panelThickness;
+  }
+
+  getHalfOf({ niche, splitting }) {
+    if (splitting === 'vertical') return (niche.width - this.thickness) / 2;
+    if (splitting === 'horizontal') return (niche.height - this.thickness) / 2;
+  }
+
+  splitInHalfByVerticalPartition({
+    niche,
+    idBefor,
+    idAfter,
+    idPartition,
+    splitting,
+  }) {
+    const halfWidth = this.getHalfOf({ niche, splitting });
+
+    const nicheBeforePartition = {
+      id: idBefor,
+      width: halfWidth,
+      height: niche.height,
+      top: niche.top,
+      left: niche.left,
+    };
+
+    const nicheAfterPartition = {
+      id: idAfter,
+      width: halfWidth,
+      height: niche.height,
+      top: niche.top,
+      left: halfWidth + this.thickness,
+    };
+
+    const partition = {
+      id: idPartition,
+      orientation: 'vertical',
+      width: this.thickness,
+      height: niche.height,
+      top: niche.top,
+      left: niche.left + halfWidth,
+    };
+
+    return [nicheBeforePartition, nicheAfterPartition, partition];
+  }
+}
+
+class Partition {
   id = null;
   length = null;
   thickness = null;
@@ -41,33 +89,29 @@ export class Partition {
     this.top = top;
     this.left = left;
   }
-
-  /* get some() {
-    return this.#field;
-  } */
 }
 
 export class VerticalPartition extends Partition {
-  orientation = 'VERTICAL'; // 'VERTICAL' | 'HORIZONTAL'
+  orientation = 'vertical'; // 'VERTICAL' | 'HORIZONTAL'
   left = [];
   right = [];
 
-  constructor(id, length, thickness, top, left) {
+  constructor({ id, length, thickness, top, left }) {
     super(id, length, thickness, top, left);
   }
 }
 
 export class HorizontalPartition extends Partition {
-  orientation = 'HORIZONTAL'; // 'VERTICAL' | 'HORIZONTAL'
+  orientation = 'horizontal'; // 'VERTICAL' | 'HORIZONTAL'
   above = [];
   under = [];
 
-  constructor(id, length, thickness, top, left) {
+  constructor({ id, length, thickness, top, left }) {
     super(id, length, thickness, top, left);
   }
 }
 
-export class Area {
+export class Niche {
   id = null;
   top = null;
   left = null;
@@ -75,12 +119,43 @@ export class Area {
   height = null;
   removeSelectionCallback = null;
 
-  constructor(id, width, height, top, left) {
+  constructor({ id, width, height, top, left }) {
     this.id = id;
     this.width = width;
     this.height = height;
     this.top = top;
     this.left = left;
+  }
+
+  static splitInHalfByVerticalPartition({
+    niche,
+    thickness,
+    idBefor,
+    idAfter,
+  }) {
+    const halfWidth = (niche.width - thickness) / 2;
+
+    const nicheBeforePartition = new Niche(
+      idBefor,
+      halfWidth,
+      niche.height,
+      niche.top,
+      niche.left
+    );
+
+    const nicheAfterPartition = new Niche(
+      idAfter,
+      halfWidth,
+      niche.height,
+      niche.top,
+      niche.width + thickness
+    );
+
+    return [nicheBeforePartition, nicheAfterPartition];
+  }
+
+  splitInHalfByPartition(thickness) {
+    return (this.width - thickness) / 2;
   }
 
   setRemoveSelectionCallback(cb) {
@@ -91,6 +166,3 @@ export class Area {
     this.removeSelectionCallback();
   }
 }
-
-const horizontal = new HorizontalPartition(1, 400, 16, 0, 0);
-console.log(horizontal);
