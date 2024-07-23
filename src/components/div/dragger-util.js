@@ -37,41 +37,66 @@ export class DividerManager {
     if (splitting === 'horizontal') return (niche.height - this.thickness) / 2;
   }
 
-  splitInHalfByVerticalPartition({
-    niche,
-    idBefor,
-    idAfter,
-    idPartition,
-    splitting,
-  }) {
-    const halfWidth = this.getHalfOf({ niche, splitting });
+  splitInHalfByVerticalPartition({ niche, splitting, id1, id2, partitionID }) {
+    const halfSize = this.getHalfOf({ niche, splitting });
 
-    const nicheBeforePartition = {
-      id: idBefor,
-      width: halfWidth,
-      height: niche.height,
-      top: niche.top,
-      left: niche.left,
-    };
+    if (splitting === 'vertical') {
+      const nicheBefore = {
+        id: id1,
+        width: halfSize,
+        height: niche.height,
+        top: niche.top,
+        left: niche.left,
+      };
 
-    const nicheAfterPartition = {
-      id: idAfter,
-      width: halfWidth,
-      height: niche.height,
-      top: niche.top,
-      left: halfWidth + this.thickness,
-    };
+      const nicheAfter = {
+        id: id2,
+        width: halfSize,
+        height: niche.height,
+        top: niche.top,
+        left: niche.left + halfSize + this.thickness,
+      };
 
-    const partition = {
-      id: idPartition,
-      orientation: 'vertical',
-      width: this.thickness,
-      height: niche.height,
-      top: niche.top,
-      left: niche.left + halfWidth,
-    };
+      const partition = {
+        id: partitionID,
+        orientation: splitting,
+        width: this.thickness,
+        height: niche.height,
+        top: niche.top,
+        left: niche.left + halfSize,
+      };
 
-    return [nicheBeforePartition, nicheAfterPartition, partition];
+      return [nicheBefore, nicheAfter, partition];
+    }
+
+    if (splitting === 'horizontal') {
+      const nicheAbove = {
+        id: id1,
+        width: niche.width,
+        height: halfSize,
+        top: niche.top,
+        left: niche.left,
+      };
+
+      const nicheUnder = {
+        id: id2,
+        width: niche.width,
+        height: halfSize,
+        top: niche.top + halfSize + this.thickness,
+        left: niche.left,
+      };
+
+      const partition = {
+        id: partitionID,
+        orientation: splitting,
+        width: niche.width,
+        height: this.thickness,
+        top: niche.top + halfSize,
+        left: niche.left,
+      };
+
+      return [nicheAbove, nicheUnder, partition];
+    }
   }
 }
 

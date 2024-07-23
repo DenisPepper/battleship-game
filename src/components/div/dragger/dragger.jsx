@@ -61,13 +61,11 @@ export function Dragger() {
     const [areaBefore, areaAfter, verticalPanel] =
       manager.splitInHalfByVerticalPartition({
         niche: activeArea,
-        idBefor: nextAreaID,
-        idAfter: nextAreaID + 1,
-        idPartition: nextVerticalID,
         splitting: 'vertical',
+        id1: nextAreaID,
+        id2: nextAreaID + 1,
+        partitionID: nextVerticalID,
       });
-
-    //console.log(areaBefore, areaAfter, verticalPanel)
 
     setAreas((areas) => [
       ...areas.filter((area) => area.id !== activeArea.id),
@@ -81,32 +79,21 @@ export function Dragger() {
   };
 
   const handleHorizontalSplitting = () => {
-    const height = reduceArea(activeArea.height, INNER_THICKNESS);
-    const newAreaOver = {
-      ...activeArea,
-      id: nextAreaID,
-      height,
-    };
-    const newAreaUnder = {
-      ...activeArea,
-      id: nextAreaID + 1,
-      top: activeArea.top + height + INNER_THICKNESS,
-      height,
-    };
-    const newHorisontal = {
-      id: nextHorisontalID,
-      orientation: 'horizontal',
-      width: activeArea.width,
-      height: INNER_THICKNESS,
-      top: activeArea.top + height,
-      left: activeArea.left,
-    };
+    const [areaAbove, areaUnder, horizontalPanel] =
+      manager.splitInHalfByVerticalPartition({
+        niche: activeArea,
+        splitting: 'horizontal',
+        id1: nextAreaID,
+        id2: nextAreaID + 1,
+        partitionID: nextHorisontalID,
+      });
+
     setAreas((areas) => [
       ...areas.filter((area) => area.id !== activeArea.id),
-      newAreaOver,
-      newAreaUnder,
+      areaAbove,
+      areaUnder,
     ]);
-    setHorizontals((items) => [...items, newHorisontal]);
+    setHorizontals((items) => [...items, horizontalPanel]);
     setNextAreaID((id) => id + 2);
     setNextHorizontalID((id) => id + 1);
     setActiveArea(null);
