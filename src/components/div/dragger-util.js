@@ -37,7 +37,7 @@ export class DividerManager {
     if (splitting === 'horizontal') return (niche.height - this.thickness) / 2;
   }
 
-  splitInHalfByVerticalPartition({ niche, splitting, id1, id2, partitionID }) {
+  splitInHalfByPanel({ niche, splitting, id1, id2, panelId }) {
     const halfSize = this.getHalfOf({ niche, splitting });
 
     if (splitting === 'vertical') {
@@ -57,8 +57,8 @@ export class DividerManager {
         left: niche.left + halfSize + this.thickness,
       };
 
-      const partition = {
-        id: partitionID,
+      const panel = {
+        id: panelId,
         orientation: splitting,
         width: this.thickness,
         height: niche.height,
@@ -66,7 +66,7 @@ export class DividerManager {
         left: niche.left + halfSize,
       };
 
-      return [nicheBefore, nicheAfter, partition];
+      return [nicheBefore, nicheAfter, panel];
     }
 
     if (splitting === 'horizontal') {
@@ -86,8 +86,8 @@ export class DividerManager {
         left: niche.left,
       };
 
-      const partition = {
-        id: partitionID,
+      const panel = {
+        id: panelId,
         orientation: splitting,
         width: niche.width,
         height: this.thickness,
@@ -95,7 +95,7 @@ export class DividerManager {
         left: niche.left,
       };
 
-      return [nicheAbove, nicheUnder, partition];
+      return [nicheAbove, nicheUnder, panel];
     }
   }
 }

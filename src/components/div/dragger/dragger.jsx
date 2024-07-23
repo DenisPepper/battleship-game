@@ -59,12 +59,12 @@ export function Dragger() {
 
   const handleVerticalSplitting = () => {
     const [areaBefore, areaAfter, verticalPanel] =
-      manager.splitInHalfByVerticalPartition({
+      manager.splitInHalfByPanel({
         niche: activeArea,
         splitting: 'vertical',
         id1: nextAreaID,
         id2: nextAreaID + 1,
-        partitionID: nextVerticalID,
+        panelId: nextVerticalID,
       });
 
     setAreas((areas) => [
@@ -80,12 +80,12 @@ export function Dragger() {
 
   const handleHorizontalSplitting = () => {
     const [areaAbove, areaUnder, horizontalPanel] =
-      manager.splitInHalfByVerticalPartition({
+      manager.splitInHalfByPanel({
         niche: activeArea,
         splitting: 'horizontal',
         id1: nextAreaID,
         id2: nextAreaID + 1,
-        partitionID: nextHorisontalID,
+        panelId: nextHorisontalID,
       });
 
     setAreas((areas) => [
