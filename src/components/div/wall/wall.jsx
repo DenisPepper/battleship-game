@@ -70,7 +70,7 @@ export function Wall(props) {
 
   return (
     <div
-      className={`dragger__wall dragger__wall--${orientation}`}
+      className={`dragger__wall dragger__${orientation}-wall`}
       style={style}
       ref={wallRef}
       onDoubleClick={handleDoubleClick}

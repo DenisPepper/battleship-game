@@ -1,16 +1,17 @@
 .dragger__wall {
   position: absolute;
   background-color: gold;
+  cursor: grab;
 }
 
 .dragger__wall--moving {
   opacity: 0.5;
 }
 
-.dragger__wall--vertical {
+.dragger__vertical-wall.dragger__wall--moving {
   cursor: e-resize;
 }
 
-.dragger__wall--horizontal {
+.dragger__horizontal-wall.dragger__wall--moving {
   cursor: ns-resize;
 }
