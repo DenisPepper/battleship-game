@@ -12,7 +12,7 @@ export class DividerManager {
   }
 
   splitByVerticalPanel({ halfSize, niche, orientation, id1, id2, panelId }) {
-    const nicheBefore = {
+    const leftNiche = {
       id: id1,
       width: halfSize,
       height: niche.height,
@@ -20,7 +20,7 @@ export class DividerManager {
       left: niche.left,
     };
 
-    const nicheAfter = {
+    const rightNiche = {
       id: id2,
       width: halfSize,
       height: niche.height,
@@ -37,11 +37,11 @@ export class DividerManager {
       left: niche.left + halfSize,
     };
 
-    return [nicheBefore, nicheAfter, panel];
+    return [leftNiche, rightNiche, panel];
   }
 
   splitByHorizontalPanel({ halfSize, niche, orientation, id1, id2, panelId }) {
-    const nicheAbove = {
+    const upperNiche = {
       id: id1,
       width: niche.width,
       height: halfSize,
@@ -49,7 +49,7 @@ export class DividerManager {
       left: niche.left,
     };
 
-    const nicheUnder = {
+    const lowerNiche = {
       id: id2,
       width: niche.width,
       height: halfSize,
@@ -66,7 +66,7 @@ export class DividerManager {
       left: niche.left,
     };
 
-    return [nicheAbove, nicheUnder, panel];
+    return [upperNiche, lowerNiche, panel];
   }
 
   splitInHalfByPanel({ niche, orientation, id1, id2, panelId }) {

@@ -58,7 +58,7 @@ export function Dragger() {
   };
 
   const handleVerticalSplitting = () => {
-    const [areaBefore, areaAfter, verticalPanel] =
+    const [leftArea, rightArea, panel] =
       manager.splitInHalfByPanel({
         niche: activeArea,
         orientation: 'vertical',
@@ -69,17 +69,17 @@ export function Dragger() {
 
     setAreas((areas) => [
       ...areas.filter((area) => area.id !== activeArea.id),
-      areaBefore,
-      areaAfter,
+      leftArea,
+      rightArea,
     ]);
-    setVerticals((items) => [...items, verticalPanel]);
+    setVerticals((items) => [...items, panel]);
     setNextAreaID((id) => id + 2);
     setNextVerticalID((id) => id + 1);
     setActiveArea(null);
   };
 
   const handleHorizontalSplitting = () => {
-    const [areaAbove, areaUnder, horizontalPanel] =
+    const [upperArea, lowerArea, panel] =
       manager.splitInHalfByPanel({
         niche: activeArea,
         orientation: 'horizontal',
@@ -90,10 +90,10 @@ export function Dragger() {
 
     setAreas((areas) => [
       ...areas.filter((area) => area.id !== activeArea.id),
-      areaAbove,
-      areaUnder,
+      upperArea,
+      lowerArea,
     ]);
-    setHorizontals((items) => [...items, horizontalPanel]);
+    setHorizontals((items) => [...items, panel]);
     setNextAreaID((id) => id + 2);
     setNextHorizontalID((id) => id + 1);
     setActiveArea(null);
