@@ -37,69 +37,87 @@ export class DividerManager {
     if (splitting === 'horizontal') return (niche.height - this.thickness) / 2;
   }
 
-  splitInHalfByPanel({ niche, splitting, id1, id2, panelId }) {
-    const halfSize = this.getHalfOf({ niche, splitting });
+  splitByVerticalPanel({ halfSize, niche, orientation, id1, id2, panelId }) {
+    const nicheBefore = {
+      id: id1,
+      width: halfSize,
+      height: niche.height,
+      top: niche.top,
+      left: niche.left,
+    };
 
-    if (splitting === 'vertical') {
-      const nicheBefore = {
-        id: id1,
-        width: halfSize,
-        height: niche.height,
-        top: niche.top,
-        left: niche.left,
-      };
+    const nicheAfter = {
+      id: id2,
+      width: halfSize,
+      height: niche.height,
+      top: niche.top,
+      left: niche.left + halfSize + this.thickness,
+    };
 
-      const nicheAfter = {
-        id: id2,
-        width: halfSize,
-        height: niche.height,
-        top: niche.top,
-        left: niche.left + halfSize + this.thickness,
-      };
+    const panel = {
+      id: panelId,
+      orientation,
+      width: this.thickness,
+      height: niche.height,
+      top: niche.top,
+      left: niche.left + halfSize,
+    };
 
-      const panel = {
-        id: panelId,
-        orientation: splitting,
-        width: this.thickness,
-        height: niche.height,
-        top: niche.top,
-        left: niche.left + halfSize,
-      };
+    return [nicheBefore, nicheAfter, panel];
+  }
 
-      return [nicheBefore, nicheAfter, panel];
+  splitByHorizontalPanel({ halfSize, niche, orientation, id1, id2, panelId }) {
+    const nicheAbove = {
+      id: id1,
+      width: niche.width,
+      height: halfSize,
+      top: niche.top,
+      left: niche.left,
+    };
+
+    const nicheUnder = {
+      id: id2,
+      width: niche.width,
+      height: halfSize,
+      top: niche.top + halfSize + this.thickness,
+      left: niche.left,
+    };
+
+    const panel = {
+      id: panelId,
+      orientation,
+      width: niche.width,
+      height: this.thickness,
+      top: niche.top + halfSize,
+      left: niche.left,
+    };
+
+    return [nicheAbove, nicheUnder, panel];
+  }
+
+  splitInHalfByPanel({ niche, orientation, id1, id2, panelId }) {
+    const halfSize = this.getHalfOf({ niche, orientation });
+
+    const props = {
+      halfSize,
+      niche,
+      orientation,
+      id1,
+      id2,
+      panelId,
+    };
+
+    if (orientation === 'vertical') {
+      return this.splitByVerticalPanel(props);
     }
 
-    if (splitting === 'horizontal') {
-      const nicheAbove = {
-        id: id1,
-        width: niche.width,
-        height: halfSize,
-        top: niche.top,
-        left: niche.left,
-      };
-
-      const nicheUnder = {
-        id: id2,
-        width: niche.width,
-        height: halfSize,
-        top: niche.top + halfSize + this.thickness,
-        left: niche.left,
-      };
-
-      const panel = {
-        id: panelId,
-        orientation: splitting,
-        width: niche.width,
-        height: this.thickness,
-        top: niche.top + halfSize,
-        left: niche.left,
-      };
-
-      return [nicheAbove, nicheUnder, panel];
+    if (orientation === 'horizontal') {
+      return this.splitByHorizontalPanel(props);
     }
   }
 }
 
+/*
 class Partition {
   id = null;
   length = null;
@@ -191,3 +209,4 @@ export class Niche {
     this.removeSelectionCallback();
   }
 }
+*/
