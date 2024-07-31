@@ -58,14 +58,13 @@ export function Dragger() {
   };
 
   const handleVerticalSplitting = () => {
-    const [leftArea, rightArea, panel] =
-      manager.splitInHalfByPanel({
-        niche: activeArea,
-        orientation: 'vertical',
-        id1: nextAreaID,
-        id2: nextAreaID + 1,
-        panelId: nextVerticalID,
-      });
+    const [leftArea, rightArea, panel] = manager.splitInHalfByPanel({
+      niche: activeArea,
+      orientation: 'vertical',
+      id1: nextAreaID,
+      id2: nextAreaID + 1,
+      panelId: nextVerticalID,
+    });
 
     setAreas((areas) => [
       ...areas.filter((area) => area.id !== activeArea.id),
@@ -79,14 +78,13 @@ export function Dragger() {
   };
 
   const handleHorizontalSplitting = () => {
-    const [upperArea, lowerArea, panel] =
-      manager.splitInHalfByPanel({
-        niche: activeArea,
-        orientation: 'horizontal',
-        id1: nextAreaID,
-        id2: nextAreaID + 1,
-        panelId: nextHorisontalID,
-      });
+    const [upperArea, lowerArea, panel] = manager.splitInHalfByPanel({
+      niche: activeArea,
+      orientation: 'horizontal',
+      id1: nextAreaID,
+      id2: nextAreaID + 1,
+      panelId: nextHorisontalID,
+    });
 
     setAreas((areas) => [
       ...areas.filter((area) => area.id !== activeArea.id),
@@ -137,31 +135,63 @@ export function Dragger() {
 
   const handleMoveWall = ({ id, orientation, coordinate: coord }) => {
     if (orientation === 'horizontal') {
-      const cb = (items) =>
-        items.map((item) => (item.id === id ? { ...item, top: coord } : item));
-
-      setHorizontals(cb);
-
       let direction = 'no-move';
       if (coord > draggerRef.current.lastTop) direction = 'down';
       if (coord < draggerRef.current.lastTop) direction = 'up';
       if (direction === 'no-move')
         direction = draggerRef.current.lastDirection ?? direction;
       draggerRef.current.lastDirection = direction;
+
+      const update = (items) =>
+        items.map((item) => (item.id === id ? { ...item, top: coord } : item));
+
+      setHorizontals(update);
     }
 
     if (orientation === 'vertical') {
-      const cb = (items) =>
-        items.map((item) => (item.id === id ? { ...item, left: coord } : item));
-
-      setVerticals(cb);
-
       let direction = 'no-move';
       if (coord > draggerRef.current.lastLeft) direction = 'right';
       if (coord < draggerRef.current.lastLeft) direction = 'left';
       if (direction === 'no-move')
         direction = draggerRef.current.lastDirection ?? direction;
       draggerRef.current.lastDirection = direction;
+
+      /* 
+      const update = (items) =>
+        items.map((item) => (item.id === id ? { ...item, left: coord } : item));
+      */
+
+      let draggablePanel = null;
+
+      const updateVerticals = (prevItems) =>
+        prevItems.map((item) => {
+          if (item.id === id) {
+            draggablePanel = item;
+            return { ...item, left: coord };
+          }
+          return item;
+        });
+
+      const isRight = (id) =>
+        draggablePanel.rightTouches.find((item) => item.id === id);
+
+      const isLeft = (id) =>
+        draggablePanel.leftTouches.find((item) => item.id === id);
+
+      const updateHorizontals = (prevItems) =>
+        prevItems.map((item) => {
+          if (isLeft(item.id)) return { ...item, width: coord };
+          if (isRight(item.id))
+            return {
+              ...item,
+              left: coord + draggablePanel.width,
+              width: item.left - coord - draggablePanel.width + item.width,
+            };
+          return item;
+        });
+
+      setVerticals(updateVerticals);
+      setHorizontals(updateHorizontals);
     }
   };
 

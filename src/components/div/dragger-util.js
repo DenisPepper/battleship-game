@@ -5,19 +5,54 @@ export class DividerManager {
     this.thickness = panelThickness;
   }
 
-  getHalfOf({ niche, orientation }) {
+  getHalfOf = ({ niche, orientation }) => {
     if (orientation === 'vertical') return (niche.width - this.thickness) / 2;
     if (orientation === 'horizontal')
       return (niche.height - this.thickness) / 2;
-  }
+  };
 
-  splitByVerticalPanel({ halfSize, niche, orientation, id1, id2, panelId }) {
+  splitByVerticalPanel = ({
+    halfSize,
+    niche,
+    orientation,
+    id1,
+    id2,
+    panelId,
+  }) => {
+    // создаст новую вертикальную панель
+    const panel = {
+      id: panelId,
+      orientation,
+      width: this.thickness,
+      height: niche.height,
+      top: niche.top,
+      left: niche.left + halfSize,
+      leftTouches: [],
+      rightTouches: [],
+    };
+
+    // укажет для соседней панели, которая СНИЗУ от новой вертикальной,
+    // что у нее появилось новое касание СВЕРХУ
+    const bottomHorizontalPanel = niche.border.bottom;
+    if (bottomHorizontalPanel) bottomHorizontalPanel.topTouches.push(panel);
+
+    // укажет для соседней панели, которая СВЕРХУ от новой вертикальной,
+    // что у нее появилось новое касание СНИЗУ
+    const topHorizontalPanel = niche.border.top;
+    if (topHorizontalPanel) topHorizontalPanel.bottomTouches.push(panel);
+
     const leftNiche = {
       id: id1,
       width: halfSize,
       height: niche.height,
       top: niche.top,
       left: niche.left,
+      border: {
+        top: niche.border.top,
+        right: panel,
+        bottom: niche.border.bottom,
+        left: niche.border.left,
+      },
     };
 
     const rightNiche = {
@@ -26,27 +61,59 @@ export class DividerManager {
       height: niche.height,
       top: niche.top,
       left: niche.left + halfSize + this.thickness,
-    };
-
-    const panel = {
-      id: panelId,
-      orientation,
-      width: this.thickness,
-      height: niche.height,
-      top: niche.top,
-      left: niche.left + halfSize,
+      border: {
+        top: niche.border.top,
+        right: niche.border.right,
+        bottom: niche.border.bottom,
+        left: panel,
+      },
     };
 
     return [leftNiche, rightNiche, panel];
-  }
+  };
 
-  splitByHorizontalPanel({ halfSize, niche, orientation, id1, id2, panelId }) {
+  splitByHorizontalPanel = ({
+    halfSize,
+    niche,
+    orientation,
+    id1,
+    id2,
+    panelId,
+  }) => {
+    // создаст новую горизонтальную панель
+    const panel = {
+      id: panelId,
+      orientation,
+      width: niche.width,
+      height: this.thickness,
+      top: niche.top + halfSize,
+      left: niche.left,
+      topTouches: [],
+      bottomTouches: [],
+    };
+
+    // укажет для соседней панели, которая СЛЕВА от новой горизонтальной,
+    // что у нее появилось новое касание СПРАВА
+    const leftVerticalPanel = niche.border.left;
+    if (leftVerticalPanel) leftVerticalPanel.rightTouches.push(panel);
+
+    // укажет для соседней панели, которая СПРАВА от новой горизонтальной,
+    // что у нее появилось новое касание СЛЕВА
+    const rightVerticalPanel = niche.border.right;
+    if (rightVerticalPanel) rightVerticalPanel.leftTouches.push(panel);
+
     const upperNiche = {
       id: id1,
       width: niche.width,
       height: halfSize,
       top: niche.top,
       left: niche.left,
+      border: {
+        top: niche.border.top,
+        right: niche.border.right,
+        bottom: panel,
+        left: niche.border.left,
+      },
     };
 
     const lowerNiche = {
@@ -55,21 +122,18 @@ export class DividerManager {
       height: halfSize,
       top: niche.top + halfSize + this.thickness,
       left: niche.left,
-    };
-
-    const panel = {
-      id: panelId,
-      orientation,
-      width: niche.width,
-      height: this.thickness,
-      top: niche.top + halfSize,
-      left: niche.left,
+      border: {
+        top: panel,
+        right: niche.border.right,
+        bottom: niche.border.bottom,
+        left: niche.border.left,
+      },
     };
 
     return [upperNiche, lowerNiche, panel];
-  }
+  };
 
-  splitInHalfByPanel({ niche, orientation, id1, id2, panelId }) {
+  splitInHalfByPanel = ({ niche, orientation, id1, id2, panelId }) => {
     const halfSize = this.getHalfOf({ niche, orientation });
 
     const props = {
@@ -88,7 +152,7 @@ export class DividerManager {
     if (orientation === 'horizontal') {
       return this.splitByHorizontalPanel(props);
     }
-  }
+  };
 }
 
 /*

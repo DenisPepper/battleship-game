@@ -15,4 +15,10 @@ export const INITIAL_AREA = {
   width: DRAGGER_WIDTH,
   height: DRAGGER_HEIGHT,
   removeSelection: null,
+  border: {
+    top: null,
+    right: null,
+    bottom: null,
+    left: null,
+  },
 };
