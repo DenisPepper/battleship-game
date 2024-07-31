@@ -32,9 +32,9 @@ export class DividerManager {
     this.thickness = panelThickness;
   }
 
-  getHalfOf({ niche, splitting }) {
-    if (splitting === 'vertical') return (niche.width - this.thickness) / 2;
-    if (splitting === 'horizontal') return (niche.height - this.thickness) / 2;
+  getHalfOf({ niche, orientation }) {
+    if (orientation === 'vertical') return (niche.width - this.thickness) / 2;
+    if (orientation === 'horizontal') return (niche.height - this.thickness) / 2;
   }
 
   splitByVerticalPanel({ halfSize, niche, orientation, id1, id2, panelId }) {

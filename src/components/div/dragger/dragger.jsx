@@ -61,7 +61,7 @@ export function Dragger() {
     const [areaBefore, areaAfter, verticalPanel] =
       manager.splitInHalfByPanel({
         niche: activeArea,
-        splitting: 'vertical',
+        orientation: 'vertical',
         id1: nextAreaID,
         id2: nextAreaID + 1,
         panelId: nextVerticalID,
@@ -82,7 +82,7 @@ export function Dragger() {
     const [areaAbove, areaUnder, horizontalPanel] =
       manager.splitInHalfByPanel({
         niche: activeArea,
-        splitting: 'horizontal',
+        orientation: 'horizontal',
         id1: nextAreaID,
         id2: nextAreaID + 1,
         panelId: nextHorisontalID,
