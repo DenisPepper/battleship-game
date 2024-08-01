@@ -4,7 +4,12 @@
   justify-content: center;
 }
 
+.dragger-wrapper * {
+  box-sizing: border-box;
+}
+
 .dragger {
+  border: 1px solid black;
   position: relative;
   /*background-color: rgb(172, 158, 158);*/
 }

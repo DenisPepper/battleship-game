@@ -1,6 +1,6 @@
 .dragger__area {
   position: absolute;
-  background-color: blanchedalmond;
+  /*background-color: blanchedalmond; */
 }
 
 .dragger__area--active {
