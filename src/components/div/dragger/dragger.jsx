@@ -180,7 +180,7 @@ export function Dragger() {
 
       const updateHorizontals = (prevItems) =>
         prevItems.map((item) => {
-          if (isLeft(item.id)) return { ...item, width: coord };
+          if (isLeft(item.id)) return { ...item, width: coord - item.left };
           if (isRight(item.id))
             return {
               ...item,
