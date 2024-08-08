@@ -6,8 +6,6 @@ export const INNER_THICKNESS = 16;
 
 export const INITIAL_ID = 1;
 
-export const INITIAL_NEXT_AREA_ID = 2;
-
 export const INITIAL_AREA = {
   id: INITIAL_ID,
   top: 0,

@@ -2,27 +2,20 @@ import { useCallback, useRef, useState } from 'react';
 import { Area } from '../area/area.jsx';
 import { Wall } from '../wall/wall.jsx';
 import { ContextMenu } from '../context-menu/context-menu.jsx';
-import {
-  DRAGGER_HEIGHT,
-  DRAGGER_WIDTH,
-  INNER_THICKNESS,
-  INITIAL_AREA,
-  INITIAL_ID,
-  INITIAL_NEXT_AREA_ID,
-} from '../dragger-config.js';
 import { DividerManager } from '../dragger-util.js';
 import './dragger.css';
 
-const manager = new DividerManager({ panelThickness: INNER_THICKNESS });
+const manager = new DividerManager({ innerWidth: 500, panelThickness: 16 });
+const config = manager.getInitialConfig();
 
 export function Dragger() {
-  const [areas, setAreas] = useState([INITIAL_AREA]);
+  const [areas, setAreas] = useState([config.startNiche]);
   const [activeArea, setActiveArea] = useState(null);
-  const [nextAreaID, setNextAreaID] = useState(INITIAL_NEXT_AREA_ID);
+  const [nextAreaID, setNextAreaID] = useState(config.id + 1);
   const [verticals, setVerticals] = useState([]);
-  const [nextVerticalID, setNextVerticalID] = useState(INITIAL_ID);
+  const [nextVerticalID, setNextVerticalID] = useState(config.id);
   const [horizontals, setHorizontals] = useState([]);
-  const [nextHorisontalID, setNextHorizontalID] = useState(INITIAL_ID);
+  const [nextHorisontalID, setNextHorizontalID] = useState(config.id);
   const [isOpenCtxMenu, setIsOpenCtxMenu] = useState(false);
   const [ctxMenuCoords, setCtxMenuCoords] = useState({ x: 0, y: 0 });
   const draggerRef = useRef(null);
@@ -199,7 +192,7 @@ export function Dragger() {
     <section className='dragger-wrapper'>
       <div
         className='dragger'
-        style={{ width: DRAGGER_WIDTH, height: DRAGGER_HEIGHT }}
+        style={{ width: config.width, height: config.height }}
         onContextMenu={handleOnContextMenu}
         onMouseLeave={handleMouseLeave}
         ref={handleRefSetup}
@@ -227,7 +220,7 @@ export function Dragger() {
             key={item.id}
             id={item.id}
             orientation={item.orientation}
-            pShift={INNER_THICKNESS / 2}
+            pShift={config.thickness / 2}
             moveWall={handleMoveWall}
             draggerRef={draggerRef.current}
             parentTop={draggerRef.current.rect.top}
@@ -245,7 +238,7 @@ export function Dragger() {
             key={item.id}
             id={item.id}
             orientation={item.orientation}
-            pShift={INNER_THICKNESS / 2}
+            pShift={config.thickness / 2}
             moveWall={handleMoveWall}
             draggerRef={draggerRef.current}
             parentTop={draggerRef.current.rect.top}

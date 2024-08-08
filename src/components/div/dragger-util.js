@@ -1,11 +1,42 @@
 export class DividerManager {
+  DEFAUL_INNER_WIDTH = 400;
+  DEFAULT_INNER_HEIGHT = 600;
+  DEFAULT_INNER_THICKNESS = 16;
+  innerWidth = null;
+  innerHeight = null;
   thickness = null;
 
-  constructor({ panelThickness }) {
-    this.thickness = panelThickness;
+  constructor({ innerWidth, innerHeight, panelThickness }) {
+    this.innerWidth = innerWidth ?? this.DEFAUL_INNER_WIDTH;
+    this.innerHeight = innerHeight ?? this.DEFAULT_INNER_HEIGHT;
+    this.thickness = panelThickness ?? this.DEFAULT_INNER_THICKNESS;
   }
 
-  // Возвращает половину ширины/высоты от исходной ниши
+  // возвращает начальные настройки divider
+  getInitialConfig() {
+    const width = this.innerWidth; // DRAGGER_WIDTH
+    const height = this.innerHeight; // DRAGGER_HEIGHT
+    const thickness = this.thickness; // INNER_THICKNESS
+    const id = 1; // INITIAL_ID
+    const startNiche = {
+      // INITIAL_AREA
+      id: 1,
+      top: 0,
+      left: 0,
+      width: width,
+      height: height,
+      removeSelection: null,
+      border: {
+        top: null,
+        right: null,
+        bottom: null,
+        left: null,
+      },
+    };
+    return { width, height, thickness, id, startNiche };
+  }
+
+  // возвращает половину ширины/высоты от исходной ниши
   getHalfOf = ({ niche, orientation }) => {
     if (orientation === 'vertical') return (niche.width - this.thickness) / 2;
     if (orientation === 'horizontal')
