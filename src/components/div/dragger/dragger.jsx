@@ -159,7 +159,7 @@ export function Dragger() {
 
       const [updateVerticals, updateHorizontals] =
         manager.getVerticalMovingPanelUpdater({
-          panelId: id,
+          movingPanel: verticals.find((item) => item.id === id),
           cursorCoordinate: coord,
         });
 

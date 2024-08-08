@@ -214,14 +214,12 @@ export class DividerManager {
     return direction;
   }
 
-  // возвращает функцию- апдэйтер при перемещении вертикальной пеергородки
-  getVerticalMovingPanelUpdater({ panelId: id, cursorCoordinate: coord }) {
-    let movingPanel = null;
-
+  // возвращает функцию- апдейтер при перемещении вертикальной пеергородки
+  getVerticalMovingPanelUpdater({ movingPanel, cursorCoordinate: coord }) {
     // функция-апдейтер: обновит левое положение перемещаемой вертикальной панели
     const updateVerticals = (prevItems) =>
       prevItems.map((item) => {
-        if (item.id === id) {
+        if (item.id === movingPanel.id) {
           movingPanel = item;
           return { ...item, left: coord };
         }
