@@ -128,11 +128,13 @@ export function Dragger() {
 
   const handleMoveWall = ({ id, orientation, coordinate: coord }) => {
     if (orientation === 'horizontal') {
-      let direction = 'no-move';
-      if (coord > draggerRef.current.lastTop) direction = 'down';
-      if (coord < draggerRef.current.lastTop) direction = 'up';
-      if (direction === 'no-move')
-        direction = draggerRef.current.lastDirection ?? direction;
+      const direction = manager.recognizeCursorDirection({
+        orientation,
+        cursorCoordinate: coord,
+        lastTop: draggerRef.current.lastTop,
+        lastDirection: draggerRef.current.lastDirection,
+      });
+
       draggerRef.current.lastDirection = direction;
 
       const update = (items) =>
@@ -142,17 +144,14 @@ export function Dragger() {
     }
 
     if (orientation === 'vertical') {
-      let direction = 'no-move';
-      if (coord > draggerRef.current.lastLeft) direction = 'right';
-      if (coord < draggerRef.current.lastLeft) direction = 'left';
-      if (direction === 'no-move')
-        direction = draggerRef.current.lastDirection ?? direction;
-      draggerRef.current.lastDirection = direction;
+      const direction = manager.recognizeCursorDirection({
+        orientation,
+        cursorCoordinate: coord,
+        lastLeft: draggerRef.current.lastLeft,
+        lastDirection: draggerRef.current.lastDirection,
+      });
 
-      /* 
-      const update = (items) =>
-        items.map((item) => (item.id === id ? { ...item, left: coord } : item));
-      */
+      draggerRef.current.lastDirection = direction;
 
       let draggablePanel = null;
 
