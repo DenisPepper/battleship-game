@@ -189,7 +189,7 @@ export class DividerManager {
     }
   };
 
-  // распознает направление движения курсора
+  // распознает и возвращает направление движения курсора
   recognizeCursorDirection({
     orientation,
     cursorCoordinate: coord,
@@ -212,6 +212,46 @@ export class DividerManager {
     if (direction === 'no-move') direction = lastDirection ?? direction;
 
     return direction;
+  }
+
+  // возвращает функцию- апдэйтер при перемещении вертикальной пеергородки
+  getVerticalMovingPanelUpdater({ panelId: id, cursorCoordinate: coord }) {
+    let movingPanel = null;
+
+    // функция-апдейтер: обновит левое положение перемещаемой вертикальной панели
+    const updateVerticals = (prevItems) =>
+      prevItems.map((item) => {
+        if (item.id === id) {
+          movingPanel = item;
+          return { ...item, left: coord };
+        }
+        return item;
+      });
+
+    // найдет соседнюю горизонтальную панель в массиве соседних панелей справа
+    const isRight = (id) =>
+      movingPanel.rightTouches.find((item) => item.id === id);
+
+    // найдет соседнюю горизонтальную панель в массиве соседних панелей слева
+    const isLeft = (id) =>
+      movingPanel.leftTouches.find((item) => item.id === id);
+
+    // функция-апдейтер ширины и левой координаты соседних горизонтальных панелей
+    const updateHorizontals = (prevItems) =>
+      prevItems.map((item) => {
+        // для панелей СЛЕВА от вертикальной (только ширину)
+        if (isLeft(item.id)) return { ...item, width: coord - item.left };
+        // для панелей СПРАВА от вертикальной (ширину и левую координату)
+        if (isRight(item.id))
+          return {
+            ...item,
+            left: coord + movingPanel.width,
+            width: item.left - coord - movingPanel.width + item.width,
+          };
+        return item;
+      });
+
+    return [updateVerticals, updateHorizontals];
   }
 }
 

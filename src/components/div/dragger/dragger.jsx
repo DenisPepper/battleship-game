@@ -153,33 +153,10 @@ export function Dragger() {
 
       draggerRef.current.lastDirection = direction;
 
-      let draggablePanel = null;
-
-      const updateVerticals = (prevItems) =>
-        prevItems.map((item) => {
-          if (item.id === id) {
-            draggablePanel = item;
-            return { ...item, left: coord };
-          }
-          return item;
-        });
-
-      const isRight = (id) =>
-        draggablePanel.rightTouches.find((item) => item.id === id);
-
-      const isLeft = (id) =>
-        draggablePanel.leftTouches.find((item) => item.id === id);
-
-      const updateHorizontals = (prevItems) =>
-        prevItems.map((item) => {
-          if (isLeft(item.id)) return { ...item, width: coord - item.left };
-          if (isRight(item.id))
-            return {
-              ...item,
-              left: coord + draggablePanel.width,
-              width: item.left - coord - draggablePanel.width + item.width,
-            };
-          return item;
+      const [updateVerticals, updateHorizontals] =
+        manager.getVerticalMovingPanelUpdater({
+          panelId: id,
+          cursorCoordinate: coord,
         });
 
       setVerticals(updateVerticals);
