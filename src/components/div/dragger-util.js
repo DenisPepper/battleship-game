@@ -5,12 +5,14 @@ export class DividerManager {
     this.thickness = panelThickness;
   }
 
+  // Возвращает половину ширины/высоты от исходной ниши
   getHalfOf = ({ niche, orientation }) => {
     if (orientation === 'vertical') return (niche.width - this.thickness) / 2;
     if (orientation === 'horizontal')
       return (niche.height - this.thickness) / 2;
   };
 
+  // возвращает результат деления исходной ниши вертикальной перегородкой
   splitByVerticalPanel = ({
     halfSize,
     niche,
@@ -72,6 +74,7 @@ export class DividerManager {
     return [leftNiche, rightNiche, panel];
   };
 
+  // возвращает результат деления исходной ниши горизонтальной перегородкой
   splitByHorizontalPanel = ({
     halfSize,
     niche,
@@ -133,6 +136,7 @@ export class DividerManager {
     return [upperNiche, lowerNiche, panel];
   };
 
+  // возвращает результат деления исходной ниши вертикальной/горизонтальной перегородкой
   splitInHalfByPanel = ({ niche, orientation, id1, id2, panelId }) => {
     const halfSize = this.getHalfOf({ niche, orientation });
 
