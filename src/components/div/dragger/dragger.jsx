@@ -137,10 +137,14 @@ export function Dragger() {
 
       draggerRef.current.lastDirection = direction;
 
-      const update = (items) =>
-        items.map((item) => (item.id === id ? { ...item, top: coord } : item));
+      const [updateVerticals, updateHorizontals] =
+        manager.getHorizontalMovingPanelUpdater({
+          movingPanel: horizontals.find((item) => item.id === id),
+          cursorCoordinate: coord,
+        });
 
-      setHorizontals(update);
+      setHorizontals(updateHorizontals);
+      setVerticals(updateVerticals);
     }
 
     if (orientation === 'vertical') {

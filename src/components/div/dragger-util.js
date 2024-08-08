@@ -253,6 +253,33 @@ export class DividerManager {
 
     return [updateVerticals, updateHorizontals];
   }
+
+  // возвращает функцию- апдейтер при перемещении горизонтальной перегородки
+  getHorizontalMovingPanelUpdater({ movingPanel, cursorCoordinate: coord }) {
+    const updateHorizontals = (items) =>
+      items.map((item) =>
+        item.id === movingPanel.id ? { ...item, top: coord } : item
+      );
+
+    const isTop = (id) => movingPanel.topTouches.find((item) => item.id === id);
+
+    const isBottom = (id) =>
+      movingPanel.bottomTouches.find((item) => item.id === id);
+
+    const updateVerticals = (prevItems) =>
+      prevItems.map((item) => {
+        if (isTop(item.id)) return { ...item, height: coord - item.top };
+        if (isBottom(item.id))
+          return {
+            ...item,
+            top: coord + movingPanel.height,
+            height: item.top + item.height - coord - movingPanel.height,
+          };
+        return item;
+      });
+
+    return [updateVerticals, updateHorizontals];
+  }
 }
 
 /*
