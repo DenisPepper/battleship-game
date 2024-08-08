@@ -128,15 +128,6 @@ export function Dragger() {
 
   const handleMoveWall = ({ id, orientation, coordinate: coord }) => {
     if (orientation === 'horizontal') {
-      const direction = manager.recognizeCursorDirection({
-        orientation,
-        cursorCoordinate: coord,
-        lastTop: draggerRef.current.lastTop,
-        lastDirection: draggerRef.current.lastDirection,
-      });
-
-      draggerRef.current.lastDirection = direction;
-
       const [updateVerticals, updateHorizontals, updateAreas] =
         manager.getUpdatersOnHorizontalPanelMoves({
           movingPanel: horizontals.find((item) => item.id === id),
@@ -149,15 +140,6 @@ export function Dragger() {
     }
 
     if (orientation === 'vertical') {
-      const direction = manager.recognizeCursorDirection({
-        orientation,
-        cursorCoordinate: coord,
-        lastLeft: draggerRef.current.lastLeft,
-        lastDirection: draggerRef.current.lastDirection,
-      });
-
-      draggerRef.current.lastDirection = direction;
-
       const [updateVerticals, updateHorizontals, updateAreas] =
         manager.getUpdatersOnVerticalPanelMoves({
           movingPanel: verticals.find((item) => item.id === id),
@@ -204,7 +186,6 @@ export function Dragger() {
             orientation={item.orientation}
             pShift={config.thickness / 2}
             moveWall={handleMoveWall}
-            draggerRef={draggerRef.current}
             parentTop={draggerRef.current.rect.top}
             parentLeft={draggerRef.current.rect.left}
             rect={{
@@ -222,7 +203,6 @@ export function Dragger() {
             orientation={item.orientation}
             pShift={config.thickness / 2}
             moveWall={handleMoveWall}
-            draggerRef={draggerRef.current}
             parentTop={draggerRef.current.rect.top}
             parentLeft={draggerRef.current.rect.left}
             rect={{

@@ -189,31 +189,6 @@ export class DividerManager {
     }
   };
 
-  // распознает и возвращает направление движения курсора
-  recognizeCursorDirection({
-    orientation,
-    cursorCoordinate: coord,
-    lastTop,
-    lastLeft,
-    lastDirection,
-  }) {
-    let direction = 'no-move';
-
-    if (orientation === 'vertical') {
-      if (coord > lastLeft) direction = 'right';
-      if (coord < lastLeft) direction = 'left';
-    }
-
-    if (orientation === 'horizontal') {
-      if (coord > lastTop) direction = 'down';
-      if (coord < lastTop) direction = 'up';
-    }
-
-    if (direction === 'no-move') direction = lastDirection ?? direction;
-
-    return direction;
-  }
-
   findPanel({ array, id }) {
     return array.find((item) => item.id === id);
   }

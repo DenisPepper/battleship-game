@@ -3,7 +3,6 @@ import './wall.css';
 
 export function Wall(props) {
   const {
-    draggerRef,
     rect: { width, height, top, left },
     id,
     orientation,
@@ -21,10 +20,6 @@ export function Wall(props) {
   };
 
   const wallRef = useRef();
-
-  orientation === 'horizontal' && (draggerRef.lastTop = top);
-
-  orientation === 'vertical' && (draggerRef.lastLeft = left);
 
   useEffect(() => {
     const wall = wallRef.current;
