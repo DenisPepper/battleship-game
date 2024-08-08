@@ -214,8 +214,12 @@ export class DividerManager {
     return direction;
   }
 
+  findPanel({ array, id }) {
+    return array.find((item) => item.id === id);
+  }
+
   // возвращает функцию- апдейтер при перемещении вертикальной пеергородки
-  getVerticalMovingPanelUpdater({ movingPanel, cursorCoordinate: coord }) {
+  getUpdatersOnVerticalPanelMoves({ movingPanel, cursorCoordinate: coord }) {
     // функция-апдейтер: обновит левое положение перемещаемой вертикальной панели
     const updateVerticals = (prevItems) =>
       prevItems.map((item) => {
@@ -226,21 +230,14 @@ export class DividerManager {
         return item;
       });
 
-    // найдет соседнюю горизонтальную панель в массиве соседних панелей справа
-    const isRight = (id) =>
-      movingPanel.rightTouches.find((item) => item.id === id);
-
-    // найдет соседнюю горизонтальную панель в массиве соседних панелей слева
-    const isLeft = (id) =>
-      movingPanel.leftTouches.find((item) => item.id === id);
-
     // функция-апдейтер ширины и левой координаты соседних горизонтальных панелей
     const updateHorizontals = (prevItems) =>
       prevItems.map((item) => {
         // для панелей СЛЕВА от вертикальной (только ширину)
-        if (isLeft(item.id)) return { ...item, width: coord - item.left };
+        if (this.findPanel({ array: movingPanel.leftTouches, id: item.id }))
+          return { ...item, width: coord - item.left };
         // для панелей СПРАВА от вертикальной (ширину и левую координату)
-        if (isRight(item.id))
+        if (this.findPanel({ array: movingPanel.rightTouches, id: item.id }))
           return {
             ...item,
             left: coord + movingPanel.width,
@@ -249,25 +246,39 @@ export class DividerManager {
         return item;
       });
 
-    return [updateVerticals, updateHorizontals];
+    // функция-апдейтер ширины и левой координаты соседних ниш
+    const updateNiches = (prevItems) =>
+      prevItems.map((item) => {
+        // для ниш СЛЕВА от вертикальной (только ширину)
+        if (item.border.right?.id === movingPanel.id)
+          return { ...item, width: coord - item.left };
+        // для ниш СПРАВА от вертикальной (ширину и левую координату)
+        if (item.border.left?.id === movingPanel.id)
+          return {
+            ...item,
+            left: coord + movingPanel.width,
+            width: item.left - coord - movingPanel.width + item.width,
+          };
+        return item;
+      });
+
+    return [updateVerticals, updateHorizontals, updateNiches];
   }
 
   // возвращает функцию- апдейтер при перемещении горизонтальной перегородки
-  getHorizontalMovingPanelUpdater({ movingPanel, cursorCoordinate: coord }) {
+  getUpdatersOnHorizontalPanelMoves({ movingPanel, cursorCoordinate: coord }) {
     const updateHorizontals = (items) =>
       items.map((item) =>
         item.id === movingPanel.id ? { ...item, top: coord } : item
       );
 
-    const isTop = (id) => movingPanel.topTouches.find((item) => item.id === id);
-
-    const isBottom = (id) =>
-      movingPanel.bottomTouches.find((item) => item.id === id);
-
     const updateVerticals = (prevItems) =>
       prevItems.map((item) => {
-        if (isTop(item.id)) return { ...item, height: coord - item.top };
-        if (isBottom(item.id))
+        // вертикальные панели СВЕРХУ
+        if (this.findPanel({ array: movingPanel.topTouches, id: item.id }))
+          return { ...item, height: coord - item.top };
+        // вертикальные панели СНИЗУ
+        if (this.findPanel({ array: movingPanel.bottomTouches, id: item.id }))
           return {
             ...item,
             top: coord + movingPanel.height,
@@ -276,7 +287,22 @@ export class DividerManager {
         return item;
       });
 
-    return [updateVerticals, updateHorizontals];
+    const updateNiches = (prevItems) =>
+      prevItems.map((item) => {
+        // ниши СВЕРХУ
+        if (item.border.bottom?.id === movingPanel.id)
+          return { ...item, height: coord - item.top };
+        // ниши СНИЗУ
+        if (item.border.top?.id === movingPanel.id)
+          return {
+            ...item,
+            top: coord + movingPanel.height,
+            height: item.top + item.height - coord - movingPanel.height,
+          };
+        return item;
+      });
+
+    return [updateVerticals, updateHorizontals, updateNiches];
   }
 }
 

@@ -137,12 +137,13 @@ export function Dragger() {
 
       draggerRef.current.lastDirection = direction;
 
-      const [updateVerticals, updateHorizontals] =
-        manager.getHorizontalMovingPanelUpdater({
+      const [updateVerticals, updateHorizontals, updateAreas] =
+        manager.getUpdatersOnHorizontalPanelMoves({
           movingPanel: horizontals.find((item) => item.id === id),
           cursorCoordinate: coord,
         });
 
+      setAreas(updateAreas);
       setHorizontals(updateHorizontals);
       setVerticals(updateVerticals);
     }
@@ -157,12 +158,13 @@ export function Dragger() {
 
       draggerRef.current.lastDirection = direction;
 
-      const [updateVerticals, updateHorizontals] =
-        manager.getVerticalMovingPanelUpdater({
+      const [updateVerticals, updateHorizontals, updateAreas] =
+        manager.getUpdatersOnVerticalPanelMoves({
           movingPanel: verticals.find((item) => item.id === id),
           cursorCoordinate: coord,
         });
 
+      setAreas(updateAreas);
       setVerticals(updateVerticals);
       setHorizontals(updateHorizontals);
     }
