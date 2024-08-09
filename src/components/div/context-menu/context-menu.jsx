@@ -13,10 +13,10 @@ export function ContextMenu(props) {
       onMouseLeave={closeMenu}
     >
       <button type='button' onClick={() => addItem('vertical')}>
-        Вертикальная перегородка
+        ↕️ vertical panel
       </button>
       <button type='button' onClick={() => addItem('horizontal')}>
-        Горизонтальная перегородка
+        ↔️ horizontal panel
       </button>
     </menu>
   );

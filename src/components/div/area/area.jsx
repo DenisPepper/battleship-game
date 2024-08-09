@@ -1,7 +1,7 @@
 import './area.css';
 
 export function Area(props) {
-  const { id, top, left, width, height, handleMouseEvents } = props;
+  const { id, number, top, left, width, height, handleMouseEvents } = props;
 
   const handleMouseClick = (evt) => {
     evt.preventDefault();
@@ -19,6 +19,7 @@ export function Area(props) {
     <div
       className={`dragger__area`}
       style={{ top, left, width, height }}
+      data-number={number}
       onClick={handleMouseClick}
     />
   );

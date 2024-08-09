@@ -3,8 +3,14 @@
   /*background-color: blanchedalmond; */
 }
 
-.dragger__area--active {
-  background-color: rgb(225, 183, 120);
+.dragger__area::before {
+  content: attr(data-number);
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  font-size: 0.6rem;
 }
 
-
+.dragger__area--active {
+  background-color: rgb(146, 146, 146);
+}

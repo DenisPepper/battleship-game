@@ -168,10 +168,11 @@ export function Dragger() {
             coords={ctxMenuCoords}
           />
         )}
-        {areas.map((item) => (
+        {areas.map((item, index) => (
           <Area
             key={item.id}
             id={item.id}
+            number={index}
             top={item.top}
             left={item.left}
             width={item.width}
@@ -214,6 +215,9 @@ export function Dragger() {
           />
         ))}
       </div>
+      <button type='button' style={{ margin: '0 auto' }}>
+        export to json
+      </button>
     </section>
   );
 }
