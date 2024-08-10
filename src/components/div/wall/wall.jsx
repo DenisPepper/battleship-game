@@ -30,13 +30,13 @@ export function Wall(props) {
         moveWall({
           id,
           orientation,
-          coordinate: x - parentLeft - pShift,
+          coordinate: Math.floor(x - parentLeft - pShift),
         });
       if (orientation === 'horizontal')
         moveWall({
           id,
           orientation,
-          coordinate: y - parentTop - pShift,
+          coordinate: Math.floor(y - parentTop - pShift),
         });
     };
 
