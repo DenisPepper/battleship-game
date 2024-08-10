@@ -1,3 +1,39 @@
+class Panel {
+  id;
+  width;
+  height;
+  top;
+  left;
+
+  constructor({ id, width, height, top, left }) {
+    this.id = id;
+    this.width = width;
+    this.height = height;
+    this.top = top;
+    this.left = left;
+  }
+}
+
+class VerticalPanel extends Panel {
+  orientation = 'vertical';
+  leftTouches = [];
+  rightTouches = [];
+
+  constructor({ id, width, height, top, left }) {
+    super({ id, width, height, top, left });
+  }
+}
+
+class HorizontalPanel extends Panel {
+  orientation = 'horizontal';
+  topTouches = [];
+  bottomTouches = [];
+
+  constructor({ id, width, height, top, left }) {
+    super({ id, width, height, top, left });
+  }
+}
+
 export class DividerManager {
   DEFAUL_INNER_WIDTH = 400;
   DEFAULT_INNER_HEIGHT = 600;
@@ -44,26 +80,16 @@ export class DividerManager {
   };
 
   // возвращает результат деления исходной ниши вертикальной перегородкой
-  splitByVerticalPanel = ({
-    halfSize,
-    niche,
-    orientation,
-    id1,
-    id2,
-    panelId,
-  }) => {
+  splitByVerticalPanel = ({ halfSize, niche, id1, id2, panelId }) => {
     // создаст новую вертикальную панель
-    const panel = {
+    const panel = new VerticalPanel({
       id: panelId,
-      orientation,
       width: this.thickness,
       height: niche.height,
       top: niche.top,
       left: niche.left + halfSize,
-      leftTouches: [],
-      rightTouches: [],
-    };
-
+    });
+   
     // укажет для соседней панели, которая СНИЗУ от новой вертикальной,
     // что у нее появилось новое касание СВЕРХУ
     const bottomHorizontalPanel = niche.border.bottom;
@@ -106,26 +132,16 @@ export class DividerManager {
   };
 
   // возвращает результат деления исходной ниши горизонтальной перегородкой
-  splitByHorizontalPanel = ({
-    halfSize,
-    niche,
-    orientation,
-    id1,
-    id2,
-    panelId,
-  }) => {
+  splitByHorizontalPanel = ({ halfSize, niche, id1, id2, panelId }) => {
     // создаст новую горизонтальную панель
-    const panel = {
+    const panel = new HorizontalPanel({
       id: panelId,
-      orientation,
       width: niche.width,
       height: this.thickness,
       top: niche.top + halfSize,
       left: niche.left,
-      topTouches: [],
-      bottomTouches: [],
-    };
-
+    });
+    
     // укажет для соседней панели, которая СЛЕВА от новой горизонтальной,
     // что у нее появилось новое касание СПРАВА
     const leftVerticalPanel = niche.border.left;
@@ -174,7 +190,6 @@ export class DividerManager {
     const props = {
       halfSize,
       niche,
-      orientation,
       id1,
       id2,
       panelId,
@@ -282,42 +297,6 @@ export class DividerManager {
 }
 
 /*
-class Partition {
-  id = null;
-  length = null;
-  thickness = null;
-  top = null;
-  left = null;
-
-  constructor(id, length, thickness, top, left) {
-    this.id = id;
-    this.length = length;
-    this.thickness = thickness;
-    this.top = top;
-    this.left = left;
-  }
-}
-
-export class VerticalPartition extends Partition {
-  orientation = 'vertical'; // 'VERTICAL' | 'HORIZONTAL'
-  left = [];
-  right = [];
-
-  constructor({ id, length, thickness, top, left }) {
-    super(id, length, thickness, top, left);
-  }
-}
-
-export class HorizontalPartition extends Partition {
-  orientation = 'horizontal'; // 'VERTICAL' | 'HORIZONTAL'
-  above = [];
-  under = [];
-
-  constructor({ id, length, thickness, top, left }) {
-    super(id, length, thickness, top, left);
-  }
-}
-
 export class Niche {
   id = null;
   top = null;
