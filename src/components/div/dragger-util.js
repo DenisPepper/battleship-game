@@ -34,13 +34,62 @@ class HorizontalPanel extends Panel {
   }
 }
 
+class Niche {
+  id;
+  width;
+  height;
+  top;
+  left;
+  border = {
+    top: null,
+    right: null,
+    bottom: null,
+    left: null,
+  };
+  removeSelection;
+
+  constructor({
+    id,
+    width,
+    height,
+    top,
+    left,
+    topPanel,
+    rightPanel,
+    bottomPanel,
+    leftPanel,
+  }) {
+    this.id = id;
+    this.width = width;
+    this.height = height;
+    this.top = top;
+    this.left = left;
+    this.border = {
+      top: topPanel,
+      right: rightPanel,
+      bottom: bottomPanel,
+      left: leftPanel,
+    };
+  }
+
+  static copyOf(niche) {
+    const copy = new Niche({ ...niche });
+    copy.border = niche.border;
+    return copy;
+  }
+
+  getBorderAt(side) {
+    return this.border[side];
+  }
+}
+
 export class DividerManager {
   DEFAUL_INNER_WIDTH = 400;
   DEFAULT_INNER_HEIGHT = 600;
   DEFAULT_INNER_THICKNESS = 16;
-  innerWidth = null;
-  innerHeight = null;
-  thickness = null;
+  innerWidth;
+  innerHeight;
+  thickness;
 
   constructor({ innerWidth, innerHeight, panelThickness }) {
     this.innerWidth = innerWidth ?? this.DEFAUL_INNER_WIDTH;
@@ -50,25 +99,17 @@ export class DividerManager {
 
   // возвращает начальные настройки divider
   getInitialConfig() {
-    const width = this.innerWidth; // DRAGGER_WIDTH
-    const height = this.innerHeight; // DRAGGER_HEIGHT
-    const thickness = this.thickness; // INNER_THICKNESS
-    const id = 1; // INITIAL_ID
-    const startNiche = {
-      // INITIAL_AREA
-      id: 1,
+    const width = this.innerWidth;
+    const height = this.innerHeight;
+    const thickness = this.thickness;
+    const id = 1;
+    const startNiche = new Niche({
+      id,
       top: 0,
       left: 0,
-      width: width,
-      height: height,
-      removeSelection: null,
-      border: {
-        top: null,
-        right: null,
-        bottom: null,
-        left: null,
-      },
-    };
+      width,
+      height,
+    });
     return { width, height, thickness, id, startNiche };
   }
 
@@ -89,44 +130,52 @@ export class DividerManager {
       top: niche.top,
       left: niche.left + halfSize,
     });
-   
+
     // укажет для соседней панели, которая СНИЗУ от новой вертикальной,
     // что у нее появилось новое касание СВЕРХУ
-    const bottomHorizontalPanel = niche.border.bottom;
+    const bottomHorizontalPanel = niche.getBorderAt('bottom');
     if (bottomHorizontalPanel) bottomHorizontalPanel.topTouches.push(panel);
 
     // укажет для соседней панели, которая СВЕРХУ от новой вертикальной,
     // что у нее появилось новое касание СНИЗУ
-    const topHorizontalPanel = niche.border.top;
+    const topHorizontalPanel = niche.getBorderAt('top');
     if (topHorizontalPanel) topHorizontalPanel.bottomTouches.push(panel);
 
-    const leftNiche = {
+    const leftNiche = new Niche({
       id: id1,
       width: halfSize,
       height: niche.height,
       top: niche.top,
       left: niche.left,
-      border: {
+      topPanel: niche.getBorderAt('top'),
+      rightPanel: panel,
+      bottomPanel: niche.getBorderAt('bottom'),
+      leftPanel: niche.getBorderAt('left'),
+      /* border: {
         top: niche.border.top,
         right: panel,
         bottom: niche.border.bottom,
         left: niche.border.left,
-      },
-    };
+      },*/
+    });
 
-    const rightNiche = {
+    const rightNiche = new Niche({
       id: id2,
       width: halfSize,
       height: niche.height,
       top: niche.top,
       left: niche.left + halfSize + this.thickness,
-      border: {
+      topPanel: niche.getBorderAt('top'),
+      rightPanel: niche.getBorderAt('right'),
+      bottomPanel: niche.getBorderAt('bottom'),
+      leftPanel: panel,
+      /*border: {
         top: niche.border.top,
         right: niche.border.right,
         bottom: niche.border.bottom,
         left: panel,
-      },
-    };
+      },*/
+    });
 
     return [leftNiche, rightNiche, panel];
   };
@@ -141,46 +190,55 @@ export class DividerManager {
       top: niche.top + halfSize,
       left: niche.left,
     });
-    
+
     // укажет для соседней панели, которая СЛЕВА от новой горизонтальной,
     // что у нее появилось новое касание СПРАВА
-    const leftVerticalPanel = niche.border.left;
+    const leftVerticalPanel = niche.getBorderAt('left');
     if (leftVerticalPanel) leftVerticalPanel.rightTouches.push(panel);
 
     // укажет для соседней панели, которая СПРАВА от новой горизонтальной,
     // что у нее появилось новое касание СЛЕВА
-    const rightVerticalPanel = niche.border.right;
+    const rightVerticalPanel = niche.getBorderAt('right');
     if (rightVerticalPanel) rightVerticalPanel.leftTouches.push(panel);
 
-    const upperNiche = {
+    const topNiche = new Niche({
       id: id1,
       width: niche.width,
       height: halfSize,
       top: niche.top,
       left: niche.left,
+      topPanel: niche.getBorderAt('top'),
+      rightPanel: niche.getBorderAt('right'),
+      bottomPanel: panel,
+      leftPanel: niche.getBorderAt('left'),
+      /* 
       border: {
         top: niche.border.top,
         right: niche.border.right,
         bottom: panel,
         left: niche.border.left,
-      },
-    };
+      },*/
+    });
 
-    const lowerNiche = {
+    const bottomNiche = new Niche({
       id: id2,
       width: niche.width,
       height: halfSize,
       top: niche.top + halfSize + this.thickness,
       left: niche.left,
-      border: {
+      topPanel: panel,
+      rightPanel: niche.getBorderAt('right'),
+      bottomPanel: niche.getBorderAt('bottom'),
+      leftPanel: niche.getBorderAt('left'),
+      /*border: {
         top: panel,
         right: niche.border.right,
         bottom: niche.border.bottom,
         left: niche.border.left,
-      },
-    };
+      },*/
+    });
 
-    return [upperNiche, lowerNiche, panel];
+    return [topNiche, bottomNiche, panel];
   };
 
   // возвращает результат деления исходной ниши вертикальной/горизонтальной перегородкой
@@ -239,17 +297,17 @@ export class DividerManager {
     // функция-апдейтер ширины и левой координаты соседних ниш
     const updateNiches = (prevItems) =>
       prevItems.map((item) => {
+        const niche = Niche.copyOf(item);
         // для ниш СЛЕВА от вертикальной (только ширину)
-        if (item.border.right?.id === movingPanel.id)
-          return { ...item, width: coord - item.left };
+        if (item.border.right?.id === movingPanel.id) {
+          niche.width = coord - item.left;
+        }
         // для ниш СПРАВА от вертикальной (ширину и левую координату)
-        if (item.border.left?.id === movingPanel.id)
-          return {
-            ...item,
-            left: coord + movingPanel.width,
-            width: item.left - coord - movingPanel.width + item.width,
-          };
-        return item;
+        if (item.border.left?.id === movingPanel.id) {
+          niche.left = coord + movingPanel.width;
+          niche.width = item.left - coord - movingPanel.width + item.width;
+        }
+        return niche;
       });
 
     return [updateVerticals, updateHorizontals, updateNiches];
@@ -279,77 +337,19 @@ export class DividerManager {
 
     const updateNiches = (prevItems) =>
       prevItems.map((item) => {
+        const niche = Niche.copyOf(item);
         // ниши СВЕРХУ
-        if (item.border.bottom?.id === movingPanel.id)
-          return { ...item, height: coord - item.top };
+        if (item.border.bottom?.id === movingPanel.id) {
+          niche.height = coord - item.top;
+        }
         // ниши СНИЗУ
-        if (item.border.top?.id === movingPanel.id)
-          return {
-            ...item,
-            top: coord + movingPanel.height,
-            height: item.top + item.height - coord - movingPanel.height,
-          };
-        return item;
+        if (item.border.top?.id === movingPanel.id) {
+          niche.top = coord + movingPanel.height;
+          niche.height = item.top + item.height - coord - movingPanel.height;
+        }
+        return niche;
       });
 
     return [updateVerticals, updateHorizontals, updateNiches];
   }
 }
-
-/*
-export class Niche {
-  id = null;
-  top = null;
-  left = null;
-  width = null;
-  height = null;
-  removeSelectionCallback = null;
-
-  constructor({ id, width, height, top, left }) {
-    this.id = id;
-    this.width = width;
-    this.height = height;
-    this.top = top;
-    this.left = left;
-  }
-
-  static splitInHalfByVerticalPartition({
-    niche,
-    thickness,
-    idBefor,
-    idAfter,
-  }) {
-    const halfWidth = (niche.width - thickness) / 2;
-
-    const nicheBeforePartition = new Niche(
-      idBefor,
-      halfWidth,
-      niche.height,
-      niche.top,
-      niche.left
-    );
-
-    const nicheAfterPartition = new Niche(
-      idAfter,
-      halfWidth,
-      niche.height,
-      niche.top,
-      niche.width + thickness
-    );
-
-    return [nicheBeforePartition, nicheAfterPartition];
-  }
-
-  splitInHalfByPartition(thickness) {
-    return (this.width - thickness) / 2;
-  }
-
-  setRemoveSelectionCallback(cb) {
-    this.removeSelectionCallback = cb;
-  }
-
-  removeSelection() {
-    this.removeSelectionCallback();
-  }
-}
-*/

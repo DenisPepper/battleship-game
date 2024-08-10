@@ -44,9 +44,10 @@ export function Dragger() {
       setIsOpenCtxMenu(false);
     }
 
-    setActiveArea({
-      ...areas.filter((item) => item.id === area.id).at(0),
-      removeSelection: area.removeSelection,
+    setActiveArea(() => {
+      const active = areas.find((item) => item.id === area.id);
+      active.removeSelection = area.removeSelection;
+      return active;
     });
   };
 
