@@ -22,6 +22,14 @@ class VerticalPanel extends Panel {
   constructor({ id, width, height, top, left }) {
     super({ id, width, height, top, left });
   }
+
+  static copyOf(panel) {
+    const copy = new VerticalPanel({ ...panel });
+    copy.orientation = panel.orientation;
+    copy.leftTouches = panel.leftTouches;
+    copy.rightTouches = panel.rightTouches;
+    return copy;
+  }
 }
 
 class HorizontalPanel extends Panel {
@@ -31,6 +39,14 @@ class HorizontalPanel extends Panel {
 
   constructor({ id, width, height, top, left }) {
     super({ id, width, height, top, left });
+  }
+
+  static copyOf(panel) {
+    const copy = new HorizontalPanel({ ...panel });
+    copy.orientation = panel.orientation;
+    copy.topTouches = panel.topTouches;
+    copy.bottomTouches = panel.bottomTouches;
+    return copy;
   }
 }
 
@@ -271,27 +287,24 @@ export class DividerManager {
     // функция-апдейтер: обновит левое положение перемещаемой вертикальной панели
     const updateVerticals = (prevItems) =>
       prevItems.map((item) => {
-        if (item.id === movingPanel.id) {
-          movingPanel = item;
-          return { ...item, left: coord };
-        }
-        return item;
+        const panel = VerticalPanel.copyOf(item);
+        if (item.id === movingPanel.id) panel.left = coord;
+        return panel;
       });
 
     // функция-апдейтер ширины и левой координаты соседних горизонтальных панелей
     const updateHorizontals = (prevItems) =>
       prevItems.map((item) => {
+        const panel = HorizontalPanel.copyOf(item);
         // для панелей СЛЕВА от вертикальной (только ширину)
         if (this.findPanel({ array: movingPanel.leftTouches, id: item.id }))
-          return { ...item, width: coord - item.left };
+          panel.width = coord - item.left;
         // для панелей СПРАВА от вертикальной (ширину и левую координату)
-        if (this.findPanel({ array: movingPanel.rightTouches, id: item.id }))
-          return {
-            ...item,
-            left: coord + movingPanel.width,
-            width: item.left - coord - movingPanel.width + item.width,
-          };
-        return item;
+        if (this.findPanel({ array: movingPanel.rightTouches, id: item.id })) {
+          panel.left = coord + movingPanel.width;
+          panel.width = item.left - coord - movingPanel.width + item.width;
+        }
+        return panel;
       });
 
     // функция-апдейтер ширины и левой координаты соседних ниш
@@ -299,9 +312,8 @@ export class DividerManager {
       prevItems.map((item) => {
         const niche = Niche.copyOf(item);
         // для ниш СЛЕВА от вертикальной (только ширину)
-        if (item.border.right?.id === movingPanel.id) {
+        if (item.border.right?.id === movingPanel.id)
           niche.width = coord - item.left;
-        }
         // для ниш СПРАВА от вертикальной (ширину и левую координату)
         if (item.border.left?.id === movingPanel.id) {
           niche.left = coord + movingPanel.width;
@@ -316,32 +328,32 @@ export class DividerManager {
   // возвращает функцию- апдейтер при перемещении горизонтальной перегородки
   getUpdatersOnHorizontalPanelMoves({ movingPanel, cursorCoordinate: coord }) {
     const updateHorizontals = (items) =>
-      items.map((item) =>
-        item.id === movingPanel.id ? { ...item, top: coord } : item
-      );
+      items.map((item) => {
+        const panel = HorizontalPanel.copyOf(item);
+        if (item.id === movingPanel.id) panel.top = coord;
+        return panel;
+      });
 
     const updateVerticals = (prevItems) =>
       prevItems.map((item) => {
+        const panel = VerticalPanel.copyOf(item);
         // вертикальные панели СВЕРХУ
         if (this.findPanel({ array: movingPanel.topTouches, id: item.id }))
-          return { ...item, height: coord - item.top };
+          panel.height = coord - item.top;
         // вертикальные панели СНИЗУ
-        if (this.findPanel({ array: movingPanel.bottomTouches, id: item.id }))
-          return {
-            ...item,
-            top: coord + movingPanel.height,
-            height: item.top + item.height - coord - movingPanel.height,
-          };
-        return item;
+        if (this.findPanel({ array: movingPanel.bottomTouches, id: item.id })) {
+          panel.top = coord + movingPanel.height;
+          panel.height = item.top + item.height - coord - movingPanel.height;
+        }
+        return panel;
       });
 
     const updateNiches = (prevItems) =>
       prevItems.map((item) => {
         const niche = Niche.copyOf(item);
         // ниши СВЕРХУ
-        if (item.border.bottom?.id === movingPanel.id) {
+        if (item.border.bottom?.id === movingPanel.id)
           niche.height = coord - item.top;
-        }
         // ниши СНИЗУ
         if (item.border.top?.id === movingPanel.id) {
           niche.top = coord + movingPanel.height;
