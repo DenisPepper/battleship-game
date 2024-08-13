@@ -31,7 +31,7 @@ export function Area(props) {
     <div
       className={`dragger__area`}
       style={{ top, left, width, height }}
-      data-number={number}
+      data-number={`${number} (${width} x ${height})`}
       onClick={handleMouseClick}
     />
   );
