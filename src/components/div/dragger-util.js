@@ -325,12 +325,27 @@ export class DividerManager {
     return [updateVerticals, updateHorizontals, updateNiches];
   }
 
+  #getUpdateRulesOnHorizontalPanelMoves(movingPanel, coord) {
+    return (ruleName, item) => {
+      if (ruleName === 'movingPanelTop') return coord;
+      if (ruleName === 'upperItemHeight') return coord - item.top;
+      if (ruleName === 'lowerItemTop') return coord + movingPanel.height;
+      if (ruleName === 'lowerItemHeight')
+        return item.top + item.height - coord - movingPanel.height;
+    };
+  }
+
   // возвращает функцию- апдейтер при перемещении горизонтальной перегородки
   getUpdatersOnHorizontalPanelMoves({ movingPanel, cursorCoordinate: coord }) {
+    const useRule = this.#getUpdateRulesOnHorizontalPanelMoves(
+      movingPanel,
+      coord
+    );
+
     const updateHorizontals = (items) =>
       items.map((item) => {
         const panel = HorizontalPanel.copyOf(item);
-        if (item.id === movingPanel.id) panel.top = coord;
+        if (item.id === movingPanel.id) panel.top = useRule('movingPanelTop');
         return panel;
       });
 
@@ -339,11 +354,11 @@ export class DividerManager {
         const panel = VerticalPanel.copyOf(item);
         // вертикальные панели СВЕРХУ
         if (this.findPanel({ array: movingPanel.topTouches, id: item.id }))
-          panel.height = coord - item.top;
+          panel.height = useRule('upperItemHeight', item);
         // вертикальные панели СНИЗУ
         if (this.findPanel({ array: movingPanel.bottomTouches, id: item.id })) {
-          panel.top = coord + movingPanel.height;
-          panel.height = item.top + item.height - coord - movingPanel.height;
+          panel.top = useRule('lowerItemTop');
+          panel.height = useRule('lowerItemHeight', item);
         }
         return panel;
       });
@@ -353,11 +368,11 @@ export class DividerManager {
         const niche = Niche.copyOf(item);
         // ниши СВЕРХУ
         if (item.border.bottom?.id === movingPanel.id)
-          niche.height = coord - item.top;
+          niche.height = useRule('upperItemHeight', item);
         // ниши СНИЗУ
         if (item.border.top?.id === movingPanel.id) {
-          niche.top = coord + movingPanel.height;
-          niche.height = item.top + item.height - coord - movingPanel.height;
+          niche.top = useRule('lowerItemTop');
+          niche.height = useRule('lowerItemHeight', item);
         }
         return niche;
       });
