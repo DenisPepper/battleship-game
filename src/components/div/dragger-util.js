@@ -16,8 +16,8 @@ class Panel {
 
 class VerticalPanel extends Panel {
   orientation = 'vertical';
-  leftTouches = [];
-  rightTouches = [];
+  leftTouches = []; // горизонтальные панели, которые примыкают СЛЕВА
+  rightTouches = []; // горизонтальные панели, которые примыкают СПРАВА
 
   constructor({ id, width, height, top, left }) {
     super({ id, width, height, top, left });
@@ -34,8 +34,8 @@ class VerticalPanel extends Panel {
 
 class HorizontalPanel extends Panel {
   orientation = 'horizontal';
-  topTouches = [];
-  bottomTouches = [];
+  topTouches = []; // вертикальные панели, которые примыкают СВЕРХУ
+  bottomTouches = []; // вертикальные панели, которые примыкают СНИЗУ
 
   constructor({ id, width, height, top, left }) {
     super({ id, width, height, top, left });
