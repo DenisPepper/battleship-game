@@ -179,6 +179,8 @@ export function Dragger() {
             width={item.width}
             height={item.height}
             handleMouseEvents={handleAreaMouseEvents}
+            minWidth={item.minWidth}
+            minHeight={item.minHeight}
           />
         ))}
         {verticals.map((item) => (

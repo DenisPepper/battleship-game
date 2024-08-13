@@ -1,11 +1,23 @@
 import './area.css';
 
 export function Area(props) {
-  const { id, number, top, left, width, height, handleMouseEvents } = props;
+  const {
+    id,
+    number,
+    top,
+    left,
+    width,
+    height,
+    handleMouseEvents,
+    minWidth,
+    minHeight,
+  } = props;
 
   const handleMouseClick = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
+
+    if (width <= minWidth || height <= minHeight) return;
 
     evt.target.classList.toggle('dragger__area--active');
 
