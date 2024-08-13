@@ -282,13 +282,28 @@ export class DividerManager {
     return array.find((item) => item.id === id);
   }
 
+  #getUpdateRulesOnVerticalPanelMoves(movingPanel, coord) {
+    return (ruleName, item) => {
+      if (ruleName === 'movingPanelLeft') return coord;
+      if (ruleName === 'leftItemWidth') return coord - item.left;
+      if (ruleName === 'rightItemLeft') return coord + movingPanel.width;
+      if (ruleName === 'rightItemWidth')
+        return item.left - coord - movingPanel.width + item.width;
+    };
+  }
+
   // возвращает функцию- апдейтер при перемещении вертикальной пеергородки
   getUpdatersOnVerticalPanelMoves({ movingPanel, cursorCoordinate: coord }) {
+    const useRule = this.#getUpdateRulesOnVerticalPanelMoves(
+      movingPanel,
+      coord
+    );
+
     // функция-апдейтер: обновит левое положение перемещаемой вертикальной панели
     const updateVerticals = (prevItems) =>
       prevItems.map((item) => {
         const panel = VerticalPanel.copyOf(item);
-        if (item.id === movingPanel.id) panel.left = coord;
+        if (item.id === movingPanel.id) panel.left = useRule('movingPanelLeft');
         return panel;
       });
 
@@ -298,11 +313,11 @@ export class DividerManager {
         const panel = HorizontalPanel.copyOf(item);
         // для панелей СЛЕВА от вертикальной (только ширину)
         if (this.findPanel({ array: movingPanel.leftTouches, id: item.id }))
-          panel.width = coord - item.left;
+          panel.width = useRule('leftItemWidth', item);
         // для панелей СПРАВА от вертикальной (ширину и левую координату)
         if (this.findPanel({ array: movingPanel.rightTouches, id: item.id })) {
-          panel.left = coord + movingPanel.width;
-          panel.width = item.left - coord - movingPanel.width + item.width;
+          panel.left = useRule('rightItemLeft', item);
+          panel.width = useRule('rightItemWidth', item);
         }
         return panel;
       });
@@ -313,11 +328,11 @@ export class DividerManager {
         const niche = Niche.copyOf(item);
         // для ниш СЛЕВА от вертикальной (только ширину)
         if (item.border.right?.id === movingPanel.id)
-          niche.width = coord - item.left;
+          niche.width = useRule('leftItemWidth', item);
         // для ниш СПРАВА от вертикальной (ширину и левую координату)
         if (item.border.left?.id === movingPanel.id) {
-          niche.left = coord + movingPanel.width;
-          niche.width = item.left - coord - movingPanel.width + item.width;
+          niche.left = useRule('rightItemLeft', item);
+          niche.width = useRule('rightItemWidth', item);
         }
         return niche;
       });
