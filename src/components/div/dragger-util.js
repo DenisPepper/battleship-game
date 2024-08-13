@@ -3,6 +3,8 @@ const DEFAULT_INNER_HEIGHT = 600;
 const DEFAULT_INNER_THICKNESS = 16;
 const NICHE_MIN_WIDTH = 80;
 const NICHE_MIN_HEIGHT = 80;
+const HORIZONTAL_PANEL_MIN_WIDTH = NICHE_MIN_WIDTH;
+const VERTICAL_PANEL_MIN_HEIGHT = NICHE_MIN_HEIGHT;
 
 class Panel {
   id;
@@ -22,8 +24,9 @@ class Panel {
 
 class VerticalPanel extends Panel {
   orientation = 'vertical';
-  leftTouches = []; // горизонтальные панели, которые примыкают СЛЕВА
-  rightTouches = []; // горизонтальные панели, которые примыкают СПРАВА
+  leftTouches = []; // горизонтальные панели (HorizontalPanel), которые примыкают СЛЕВА
+  rightTouches = []; // горизонтальные панели (HorizontalPanel), которые примыкают СПРАВА
+  minHeight = VERTICAL_PANEL_MIN_HEIGHT;
 
   constructor({ id, width, height, top, left }) {
     super({ id, width, height, top, left });
@@ -36,12 +39,17 @@ class VerticalPanel extends Panel {
     copy.rightTouches = panel.rightTouches;
     return copy;
   }
+
+  isMin() {
+    return this.height <= this.minHeight;
+  }
 }
 
 class HorizontalPanel extends Panel {
   orientation = 'horizontal';
   topTouches = []; // вертикальные панели, которые примыкают СВЕРХУ
   bottomTouches = []; // вертикальные панели, которые примыкают СНИЗУ
+  minWidth = HORIZONTAL_PANEL_MIN_WIDTH;
 
   constructor({ id, width, height, top, left }) {
     super({ id, width, height, top, left });
@@ -53,6 +61,10 @@ class HorizontalPanel extends Panel {
     copy.topTouches = panel.topTouches;
     copy.bottomTouches = panel.bottomTouches;
     return copy;
+  }
+
+  isMin() {
+    return this.width <= this.minWidth;
   }
 }
 
