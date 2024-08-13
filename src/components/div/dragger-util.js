@@ -1,3 +1,9 @@
+const DEFAUL_INNER_WIDTH = 400;
+const DEFAULT_INNER_HEIGHT = 600;
+const DEFAULT_INNER_THICKNESS = 16;
+const NICHE_MIN_WIDTH = 80;
+const NICHE_MIN_HEIGHT = 80;
+
 class Panel {
   id;
   width;
@@ -52,6 +58,8 @@ class HorizontalPanel extends Panel {
 
 class Niche {
   id;
+  minWidth = NICHE_MIN_WIDTH;
+  minHeight = NICHE_MIN_HEIGHT;
   width;
   height;
   top;
@@ -100,17 +108,14 @@ class Niche {
 }
 
 export class DividerManager {
-  DEFAUL_INNER_WIDTH = 400;
-  DEFAULT_INNER_HEIGHT = 600;
-  DEFAULT_INNER_THICKNESS = 16;
   innerWidth;
   innerHeight;
   thickness;
 
   constructor({ innerWidth, innerHeight, panelThickness }) {
-    this.innerWidth = innerWidth ?? this.DEFAUL_INNER_WIDTH;
-    this.innerHeight = innerHeight ?? this.DEFAULT_INNER_HEIGHT;
-    this.thickness = panelThickness ?? this.DEFAULT_INNER_THICKNESS;
+    this.innerWidth = innerWidth ?? DEFAUL_INNER_WIDTH;
+    this.innerHeight = innerHeight ?? DEFAULT_INNER_HEIGHT;
+    this.thickness = panelThickness ?? DEFAULT_INNER_THICKNESS;
   }
 
   // возвращает начальные настройки divider
