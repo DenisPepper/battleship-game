@@ -13,11 +13,13 @@ export function Area(props) {
     minHeight,
   } = props;
 
+  let invalid;
+  if (width < minWidth || height < minHeight)
+    invalid = 'dragger__area--invalid';
+
   const handleMouseClick = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-
-    if (width <= minWidth || height <= minHeight) return;
 
     evt.target.classList.toggle('dragger__area--active');
 
@@ -29,7 +31,7 @@ export function Area(props) {
 
   return (
     <div
-      className={`dragger__area`}
+      className={`dragger__area ${invalid}`}
       style={{ top, left, width, height }}
       data-number={`${number} (${width} x ${height})`}
       onClick={handleMouseClick}

@@ -14,3 +14,7 @@
 .dragger__area--active {
   background-color: rgb(146, 146, 146);
 }
+
+.dragger__area--invalid {
+  background-color: crimson;
+}
