@@ -1,5 +1,6 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import './wall.css';
+import { ContextMenu } from '../context-menu/context-menu';
 
 export function Wall(props) {
   const {
@@ -19,6 +20,8 @@ export function Wall(props) {
     left,
   };
 
+  const [isOpenCtxMenu, setIsOpenCtxMenu] = useState(false);
+  const [ctxMenuCoords, setCtxMenuCoords] = useState({ x: 0, y: 0 });
   const wallRef = useRef();
 
   useEffect(() => {
@@ -63,12 +66,43 @@ export function Wall(props) {
     // удаляет перегородку
   };
 
+  const handleOnContextMenu = (evt) => {
+    evt.preventDefault();
+
+    const coords = {
+      x: evt.clientX - parentLeft,
+      y: evt.clientY - parentTop,
+    };
+
+    if (isOpenCtxMenu) {
+      setCtxMenuCoords(coords);
+      return;
+    }
+
+    setCtxMenuCoords(coords);
+    setIsOpenCtxMenu(true);
+  };
+
+  const handleCtxMenuClose = () => {
+    setIsOpenCtxMenu(false);
+  };
+
   return (
-    <div
-      className={`dragger__wall dragger__${orientation}-wall`}
-      style={style}
-      ref={wallRef}
-      onDoubleClick={handleDoubleClick}
-    ></div>
+    <>
+      {isOpenCtxMenu && (
+        <ContextMenu
+          closeMenu={handleCtxMenuClose}
+          //addItem={handleCtxMenuAddItem}
+          coords={ctxMenuCoords}
+        />
+      )}
+      <div
+        className={`dragger__wall dragger__${orientation}-wall`}
+        style={style}
+        ref={wallRef}
+        onDoubleClick={handleDoubleClick}
+        onContextMenu={handleOnContextMenu}
+      ></div>
+    </>
   );
 }
