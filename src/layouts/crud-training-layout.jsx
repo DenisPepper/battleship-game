@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, ScrollRestoration, useNavigation } from 'react-router-dom';
 import { signOut } from '../supabase/client';
+import './crud-training-layout.scss'
 
 export function CrudTrainingLayout() {
   const { state } = useNavigation();
@@ -30,8 +31,8 @@ export function CrudTrainingLayout() {
               🏠
             </Link>
           </li>
-          <li>
-            <Link to='/ui'>ui</Link>
+          <li className='nav-link--favorite'>
+            <Link to='/battle-field'>battle-field</Link>
           </li>
           <li>
             <Link to='/auth'>auth</Link>

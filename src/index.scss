@@ -1,0 +1,12 @@
+:root {
+  --color-blue-dark: rgb(30, 30, 50);
+  --color-font-primary: rgb(119, 221, 138);
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--color-blue-dark);
+  color: var(--color-font-primary);
+}
+
+// min resolution support 320
