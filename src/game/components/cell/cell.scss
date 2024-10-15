@@ -3,4 +3,8 @@
   height: 2.8rem;
   background-color: var(--color-font-primary);
   color: var(--color-blue-dark);
+
+  &--touched {
+    background-color: orangered;
+  }
 }
