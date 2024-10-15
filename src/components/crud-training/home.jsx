@@ -62,6 +62,7 @@ export function Home() {
 
   return (
     <div>
+      <Links />
       <button
         type='button'
         onClick={() => dispatch({ type: Actions.onStart })}
@@ -72,7 +73,6 @@ export function Home() {
       {state.isLoading && <p>Loading ...</p>}
       {state.error && <p>{state.error}</p>}
       {!!carsList.length && <CarsList cars={carsList} />}
-      <Links />
     </div>
   );
 }

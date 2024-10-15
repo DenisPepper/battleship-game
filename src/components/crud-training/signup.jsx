@@ -9,6 +9,8 @@ export function Signup() {
   };
 
   const onSuccess = (data) => {
+    console.log(data);
+    
     if (data) alert('please, check your email address');
   };
 
@@ -37,7 +39,7 @@ export function Signup() {
           Password
           <input type='password' name='password' autoComplete='on' />
         </label>
-        <button type='submit'>Sign in</button>
+        <button type='submit'>Sign up</button>
       </section>
       <section>{error && <span>{error}</span>}</section>
       <footer></footer>

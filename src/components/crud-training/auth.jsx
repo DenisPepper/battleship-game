@@ -5,17 +5,18 @@ import { signInWithEmail } from '../../supabase/client';
 export function Authentication() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const auth = localStorage.getItem('sb-vjschmwmhttjrxfcglgl-auth-token');
 
   useLayoutEffect(() => {
-    const auth = localStorage.getItem('sb-vjschmwmhttjrxfcglgl-auth-token');
     if (auth) navigate('/');
-  }, [navigate]);
+  }, [auth, navigate]);
 
   const onError = (error) => {
     setError(error.message ?? 'error on sign in!');
   };
 
   const onSuccess = (data) => {
+    console.log(data);
     navigate('/');
   };
 

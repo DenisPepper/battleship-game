@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-  Link,
-  Outlet,
-  ScrollRestoration,
-  useNavigation,
-} from 'react-router-dom';
+import { Link, Outlet, ScrollRestoration, useNavigation } from 'react-router-dom';
 import { signOut } from '../supabase/client';
 
 export function CrudTrainingLayout() {
@@ -34,6 +29,9 @@ export function CrudTrainingLayout() {
             <Link style={{ fontSize: '24px' }} to='/'>
               🏠
             </Link>
+          </li>
+          <li>
+            <Link to='/ui'>ui</Link>
           </li>
           <li>
             <Link to='/auth'>auth</Link>
