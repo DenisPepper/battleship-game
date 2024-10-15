@@ -5,6 +5,15 @@ const apiKey = import.meta.env.VITE_SUPABASE_API_KEY;
 
 export const supabase = createClient(apiUrl, apiKey);
 
+// подписка на изменения в реальном времени.
+const channel = supabase
+  .channel('table_db_changes')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'cars' }, (payload) => {
+    console.log(payload);
+  })
+  .subscribe();
+//https://youtu.be/2rUjcmgZDwQ
+
 export const fetchCars = async (onError, onSuccess) => {
   const { data, error } = await supabase.from('cars').select();
 
