@@ -25,18 +25,10 @@ export function BattleField(props) {
         <div className='placement'>
           <h2 className='placement__header'>Add a ship to the field:</h2>
           <div className='placement__controls'>
-            <button className='placement__btn' type='button'>
-              4
-            </button>
-            <button className='placement__btn' type='button'>
-              3
-            </button>
-            <button className='placement__btn' type='button'>
-              2
-            </button>
-            <button className='placement__btn' type='button'>
-              1
-            </button>
+            <div className='placement__ship ship--4'></div>
+            <div className='placement__ship ship--3'></div>
+            <div className='placement__ship ship--2'></div>
+            <div className='placement__ship ship--1'></div>
           </div>
         </div>
       </section>

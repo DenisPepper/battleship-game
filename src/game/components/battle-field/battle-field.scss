@@ -10,7 +10,7 @@
 }
 
 .placement {
-  padding-top: 2rem;
+  padding: 2rem;
   background-color: orangered;
 }
 
@@ -19,25 +19,26 @@
   color: var(--color-blue-dark);
 }
 
-.placement__controls {
-  padding: 2rem;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
+.placement__ship {
+  --size: 2.8rem;
+  width: var(--size);
+  height: var(--size);
+  margin: 0.4rem;
+  background-color: orangered;
+  outline: 2px solid var(--color-blue-dark);
 }
 
-.placement__btn {
-  padding: 2rem;
-  border-radius: 2rem;
-  border: 0;
-  font-size: 2rem;
-  font-weight: 700;
-  transform: scale(1);
-  transition: all 0.2s;
-  background-color: var(--color-blue-dark);
-  color: orangered;
+.ship--4 {
+  width: calc(var(--size) * 4);
+}
 
-  &:active {
-    transform: scale(0.8);
-  }
+.ship--3 {
+  width: calc(var(--size) * 3);
+}
+
+.ship--2 {
+  width: calc(var(--size) * 2);
+}
+
+.ship--1 {
 }
