@@ -3,10 +3,11 @@ import React, { useState, useContext } from 'react';
 const GameContext = React.createContext();
 
 export function GameProvider(props) {
-  const [count, setCount] = useState(0);
+  const [addingShips, setAddingShips] = useState(0);
+
   const value = {
-    count,
-    setCount,
+    addingShips,
+    setAddingShips,
   };
   return <GameContext.Provider value={value} {...props} />;
 }

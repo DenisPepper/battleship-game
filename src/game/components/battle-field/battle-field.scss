@@ -1,6 +1,43 @@
+.cell-row:last-child {
+  background-color: yellow;
+}
+
 .cell-row {
   margin-bottom: 0.2rem;
   display: flex;
   gap: 0.2rem;
   justify-content: center;
+}
+
+.placement {
+  padding-top: 2rem;
+  background-color: orangered;
+}
+
+.placement__header {
+  text-align: center;
+  color: var(--color-blue-dark);
+}
+
+.placement__controls {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.placement__btn {
+  padding: 2rem;
+  border-radius: 2rem;
+  border: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  transform: scale(1);
+  transition: all 0.2s;
+  background-color: var(--color-blue-dark);
+  color: orangered;
+
+  &:active {
+    transform: scale(0.8);
+  }
 }
