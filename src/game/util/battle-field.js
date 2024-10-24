@@ -26,8 +26,8 @@ export class BattleField {
   };
 
   print = (number) => {
-    if (!number) console.log(this.#field);
-    if (number) console.log(this.#field.find((row) => row.id === number));
+    if (!number) console.dir(this.#field);
+    if (number) console.dir(this.#field.find((row) => row.id === number));
   };
 
   /**
@@ -70,12 +70,4 @@ export class BattleField {
 }
 
 const field = new BattleField();
-
-const input = [
-  { row: 2, cell: 7 },
-  { row: 2, cell: 4 },
-  { row: 2, cell: 5 },
-  { row: 2, cell: 3 },
-];
-
-console.log(field.isValidVertical(input));
+field.print(1);

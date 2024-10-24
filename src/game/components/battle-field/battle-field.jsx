@@ -25,7 +25,7 @@ export function BattleField(props) {
         <div className='placement'>
           <h2 className='placement__header'>Add a ship to the field:</h2>
           <div className='placement__controls'>
-            <div className='placement__ship ship--4'></div>
+            <div className='placement__ship ship--4' draggable></div>
             <div className='placement__ship ship--3'></div>
             <div className='placement__ship ship--2'></div>
             <div className='placement__ship ship--1'></div>
