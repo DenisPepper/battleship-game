@@ -11,34 +11,4 @@
 
 .placement {
   padding: 2rem;
-  background-color: orangered;
-}
-
-.placement__header {
-  text-align: center;
-  color: var(--color-blue-dark);
-}
-
-.placement__ship {
-  --size: 2.8rem;
-  width: var(--size);
-  height: var(--size);
-  margin: 1rem;
-  background-color: orangered;
-  outline: 2px solid var(--color-blue-dark);
-}
-
-.ship--4 {
-  width: calc(var(--size) * 4);
-}
-
-.ship--3 {
-  width: calc(var(--size) * 3);
-}
-
-.ship--2 {
-  width: calc(var(--size) * 2);
-}
-
-.ship--1 {
 }

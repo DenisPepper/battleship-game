@@ -3,7 +3,7 @@
  */
 
 export class BattleField {
-  #field = [];
+  #rows = [];
   #ships = {};
 
   constructor() {
@@ -15,7 +15,7 @@ export class BattleField {
       id: number,
       cells: Array.from({ length: 10 }, (_, i) => ({ id: i + 1, ship: '' })),
     });
-    this.#field = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(buildRow);
+    this.#rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(buildRow);
 
     this.#ships = {
       1: { count: 0, maxCount: 4 },
@@ -25,9 +25,11 @@ export class BattleField {
     };
   };
 
+  getRows = () => [...this.#rows];
+
   print = (number) => {
-    if (!number) console.dir(this.#field);
-    if (number) console.dir(this.#field.find((row) => row.id === number));
+    if (!number) console.dir(this.#rows);
+    if (number) console.dir(this.#rows.find((row) => row.id === number));
   };
 
   /**
@@ -69,5 +71,5 @@ export class BattleField {
   };
 }
 
-const field = new BattleField();
-field.print(1);
+//const field = new BattleField();
+//console.log(field.getRows());
