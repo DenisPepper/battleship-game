@@ -1,0 +1,15 @@
+.add-form {
+  display: grid;
+  gap: 2rem;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+
+  &__ship-type {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  &__button {
+    grid-column: 1/-1;
+  }
+}

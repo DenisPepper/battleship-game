@@ -26,14 +26,14 @@ export function AddForm() {
           <input type='radio' name='ship-type' value={1} defaultChecked />
         </label>
       </fieldset>
-      <fieldset>
+      <fieldset className='add-form__ship-position'>
         <legend>position</legend>
         <select name='ship-position'>
           <option value='vertical'>vertical</option>
           <option value='horizontal'>horizontal</option>
         </select>
       </fieldset>
-      <button type='submit'>Add</button>
+      <button type='submit' className='add-form__button'>Add</button>
     </form>
   );
 }
