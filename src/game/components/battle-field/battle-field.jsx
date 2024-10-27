@@ -5,12 +5,13 @@ import { AddForm } from '../add-form/add-form';
 import { BattleField as Field } from '/src/game/util/battle-field.js';
 
 const field = new Field();
-field.addShip(4, [
+const coords = [
   { row: 3, cell: 4 },
   { row: 3, cell: 5 },
   { row: 3, cell: 6 },
   { row: 3, cell: 7 },
-]);
+];
+field.addShip(coords, coords.length);
 
 export function BattleField(props) {
   const { clss } = props;
@@ -21,6 +22,15 @@ export function BattleField(props) {
     if (action === 'add') setShipCoord((coords) => [...coords, { row, cell }]);
     if (action === 'remove')
       setShipCoord((coords) => coords.filter((item) => `${item.row}.${item.cell}` !== `${row}.${cell}`));
+  };
+
+  const addShip = () => {
+    const isVertical = field.isValidVertical(shipCoords);
+    const isHorizontal = field.isValidHorizontal(shipCoords);
+    if (isVertical || isHorizontal) {
+      field.addShip(shipCoords, shipCoords.length);
+      setShipCoord([]);
+    }
   };
 
   return (
@@ -46,7 +56,7 @@ export function BattleField(props) {
           );
         })}
         <div className='placement'>
-          <AddForm />
+          <AddForm submitHandler={addShip} />
         </div>
       </section>
     </main>

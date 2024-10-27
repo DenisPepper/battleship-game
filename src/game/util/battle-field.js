@@ -65,7 +65,7 @@ export class BattleField {
     }
   };
 
-  addShip = (length, coords) => {
+  addShip = (coords, length) => {
     if (!length || !coords) return;
 
     const { count, maxCount, items } = this.#ships[Ship.type(length)];
@@ -77,6 +77,7 @@ export class BattleField {
       this.#placeShipToCell(ship, coord);
     }
 
+    this.#ships[Ship.type(length)].count += 1;
     items.push(ship);
   };
 
@@ -85,6 +86,10 @@ export class BattleField {
   print = (number) => {
     if (!number) console.dir(this.#rows);
     if (number) console.dir(this.#rows.find((row) => row.id === number));
+  };
+
+  printShips = () => {
+    console.dir(this.#ships);
   };
 
   /**
@@ -126,11 +131,18 @@ export class BattleField {
   };
 }
 
-/*const field = new BattleField();
-field.addShip(4, [
-  { row: 1, cell: 1 },
-  { row: 1, cell: 2 },
-  { row: 1, cell: 3 },
-  { row: 1, cell: 4 },
-]);
-console.log(field.print(1)); */
+/* 
+const field = new BattleField();
+const coords = [
+  { row: 3, cell: 4 },
+  { row: 3, cell: 5 },
+  { row: 3, cell: 6 },
+  { row: 3, cell: 7 },
+];
+field.addShip(coords, coords.length);
+
+field.printShips();
+
+field.addShip(coords, coords.length);
+
+*/
