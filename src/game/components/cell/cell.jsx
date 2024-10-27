@@ -15,10 +15,9 @@ export function Cell(props) {
 
   return (
     <div
-      className={`
-        cell ${nearby ? 'cell--nearby' : ''} ${ship ? 'cell--ship' : ''} ${isTouched ? 'cell--touched' : ''} ${
-        shouldRemove ? 'cell--remove' : ''
-      }`}
+      className={`cell ${nearby ? 'cell--nearby' : ''} ${ship ? 'cell--ship' : ''} ${
+        isTouched ? 'cell--touched' : ''
+      } ${shouldRemove ? 'cell--remove' : ''}`}
       onTouchStart={handleTouchStart}
     >
       {`${row}.${cell}`}

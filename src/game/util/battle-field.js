@@ -82,7 +82,16 @@ export class BattleField {
   #unsetNearby = (coord) => {
     const nearbyCoords = this.#getNearbyCoords(coord);
     for (const nearbyCoord of nearbyCoords) {
-      this.#getCell(nearbyCoord).nearby = false;
+      const cell = this.#getCell(nearbyCoord);
+      cell.nearby = false;
+      const subCoords = this.#getNearbyCoords(nearbyCoord);
+      for (const subCoord of subCoords) {
+        const subCell = this.#getCell(subCoord);
+        if (subCell.ship) {
+          cell.nearby = true;
+          break;
+        }
+      }
     }
   };
 
@@ -96,8 +105,8 @@ export class BattleField {
 
     const ship = new Ship(length, coords);
     for (const coord of coords) {
-      this.#setNearby(coord);
       this.#placeShipToCell(ship, coord);
+      this.#setNearby(coord);
     }
 
     shipsGroup.count += 1;
@@ -110,8 +119,8 @@ export class BattleField {
     const shipsGroup = this.#ships[ship.getName()];
 
     for (const coord of ship.getCoords()) {
-      this.#unsetNearby(coord);
       this.#removeShipFromCell(coord);
+      this.#unsetNearby(coord);
     }
 
     shipsGroup.count -= 1;
