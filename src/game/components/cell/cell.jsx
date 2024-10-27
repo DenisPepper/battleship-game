@@ -20,7 +20,7 @@ export function Cell(props) {
       } ${shouldRemove ? 'cell--remove' : ''}`}
       onTouchStart={handleTouchStart}
     >
-      {`${row}.${cell}`}
+      {/*`${row}.${cell}`*/}
     </div>
   );
 }
