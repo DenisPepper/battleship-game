@@ -17,6 +17,33 @@
   }
 
   &--remove {
-    background-color: rgb(86, 15, 15);
+    background-color: rgb(33, 48, 36);
+    position: relative;
+  }
+
+  &--remove::before {
+    position: absolute;
+    content: '';
+    display: block;
+    background-color: crimson;
+    width: 0.2rem;
+    height: 140%;
+    left: 0;
+    top: 0;
+    transform-origin: left top;
+    transform: rotate(-45deg);
+  }
+
+  &--remove::after {
+    position: absolute;
+    content: '';
+    display: block;
+    background-color: crimson;
+    width: 0.2rem;
+    height: 140%;
+    right: 0;
+    top: 0;
+    transform-origin: right top;
+    transform: rotate(45deg);
   }
 }

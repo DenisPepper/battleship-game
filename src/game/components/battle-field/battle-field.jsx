@@ -5,6 +5,8 @@ import { AddForm } from '../add-form/add-form';
 import { BattleField as Field } from '/src/game/util/battle-field.js';
 
 const field = new Field();
+
+/* 
 const coords = [
   { row: 3, cell: 4 },
   { row: 3, cell: 5 },
@@ -12,6 +14,7 @@ const coords = [
   { row: 3, cell: 7 },
 ];
 field.addShip(coords, coords.length);
+*/
 
 export function BattleField(props) {
   const { clss } = props;
