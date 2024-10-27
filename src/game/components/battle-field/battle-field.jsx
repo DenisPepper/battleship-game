@@ -16,6 +16,7 @@ field.addShip(coords, coords.length);
 export function BattleField(props) {
   const { clss } = props;
   const [shipCoords, setShipCoord] = useState([]);
+  const [shipsSouldRemove, setShipsSouldRemove] = useState([]);
 
   const handleCellTouch = (args) => {
     const { row, cell, action } = args;
@@ -24,9 +25,23 @@ export function BattleField(props) {
       setShipCoord((coords) => coords.filter((item) => `${item.row}.${item.cell}` !== `${row}.${cell}`));
   };
 
+  const handleCellTouchWithShip = (args) => {
+    const { ship, cancel } = args;
+    if (cancel) {
+      setShipsSouldRemove((ships) => ships.filter((item) => item !== ship));
+      return;
+    }
+    setShipsSouldRemove((ships) => [...ships, ship]);
+  };
+
   const addShip = () => {
     field.addShip(shipCoords, shipCoords.length);
     setShipCoord([]);
+  };
+
+  const removeShips = () => {
+    shipsSouldRemove.forEach((ship) => field.removeShip(ship));
+    setShipsSouldRemove([]);
   };
 
   return (
@@ -44,7 +59,9 @@ export function BattleField(props) {
                     ship={cell.ship}
                     nearby={cell.nearby}
                     touchHandler={handleCellTouch}
+                    removeHandler={handleCellTouchWithShip}
                     shipCoords={shipCoords}
+                    shipsSouldRemove={shipsSouldRemove}
                   />
                 );
               })}
@@ -52,7 +69,7 @@ export function BattleField(props) {
           );
         })}
         <div className='placement'>
-          <AddForm submitHandler={addShip} />
+          <AddForm ships={field.getShips()} submitHandler={addShip} resetHandler={removeShips} />
         </div>
       </section>
     </main>

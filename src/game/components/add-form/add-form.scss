@@ -1,7 +1,33 @@
 .add-form {
   display: grid;
+  gap: 1rem;
 
   &__button {
     grid-column: 1/-1;
+  }
+
+  &__ship-group {
+    border: none;
+    padding: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  &__ship-btn {
+    width: 2.8rem;
+    height: 2.8rem;
+  }
+
+  .ship-btn--4 {
+    width: calc(4 * 2.8rem);
+  }
+
+  .ship-btn--3 {
+    width: calc(3 * 2.8rem);
+  }
+
+  .ship-btn--2 {
+    width: calc(2 * 2.8rem);
   }
 }

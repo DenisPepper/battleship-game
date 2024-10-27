@@ -17,4 +17,6 @@ export class Ship {
   getName = () => this.#length;
 
   getCoords = () => this.#coords;
+
+  getId = () => this.#coords.reduce((acc, { row, cell }) => `${acc}${row}.${cell} `, '').trim();
 }

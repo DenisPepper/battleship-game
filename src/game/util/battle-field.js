@@ -27,6 +27,10 @@ export class BattleField {
     this.#rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(buildRow);
   };
 
+  getShips = () => {
+    return Object.values(this.#ships).reduce((acc, { items }) => [...acc, ...items], []);
+  };
+
   getRows = () => [...this.#rows];
 
   #getCell = (coord) => this.#rows.find((row) => row.id === coord.row).cells.find((cell) => cell.id === coord.cell);
@@ -34,6 +38,12 @@ export class BattleField {
   #placeShipToCell = (ship, coord) => {
     const cell = this.#getCell(coord);
     cell.ship = ship;
+    if (cell.nearby) cell.nearby = false;
+  };
+
+  #removeShipFromCell = (coord) => {
+    const cell = this.#getCell(coord);
+    cell.ship = null;
     if (cell.nearby) cell.nearby = false;
   };
 
@@ -69,6 +79,13 @@ export class BattleField {
     }
   };
 
+  #unsetNearby = (coord) => {
+    const nearbyCoords = this.#getNearbyCoords(coord);
+    for (const nearbyCoord of nearbyCoords) {
+      this.#getCell(nearbyCoord).nearby = false;
+    }
+  };
+
   addShip = (coords, length) => {
     if (!length || !coords) return;
 
@@ -87,7 +104,19 @@ export class BattleField {
     shipsGroup.items.push(ship);
   };
 
-  removeShip = (ship) => {};
+  removeShip = (ship) => {
+    if (!ship) return;
+
+    const shipsGroup = this.#ships[ship.getName()];
+
+    for (const coord of ship.getCoords()) {
+      this.#unsetNearby(coord);
+      this.#removeShipFromCell(coord);
+    }
+
+    shipsGroup.count -= 1;
+    shipsGroup.items = shipsGroup.items.filter((item) => item.getId() !== ship.getId());
+  };
 
   print = (number) => {
     if (!number) console.dir(this.#rows);
@@ -151,8 +180,8 @@ const coords = [
 ];
 field.addShip(coords, coords.length);
 
-field.printShips();
+//field.printShips();
 
-field.addShip(coords, coords.length);
+console.log(field.getShips());
 
 */
