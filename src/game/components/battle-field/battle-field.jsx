@@ -29,8 +29,8 @@ export function BattleField(props) {
     const isHorizontal = field.isValidHorizontal(shipCoords);
     if (isVertical || isHorizontal) {
       field.addShip(shipCoords, shipCoords.length);
-      setShipCoord([]);
     }
+    setShipCoord([]);
   };
 
   return (
