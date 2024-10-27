@@ -4,6 +4,10 @@
   background-color: var(--color-font-primary);
   color: var(--color-blue-dark);
 
+  &--with-ship {
+    background-color: cornflowerblue;
+  }
+
   &--touched {
     background-color: orangered;
   }

@@ -5,6 +5,12 @@ import { AddForm } from '../add-form/add-form';
 import { BattleField as Field } from '/src/game/util/battle-field.js';
 
 const field = new Field();
+field.addShip(4, [
+  { row: 1, cell: 1 },
+  { row: 1, cell: 2 },
+  { row: 1, cell: 3 },
+  { row: 1, cell: 4 },
+]);
 
 export function BattleField(props) {
   const { clss } = props;
@@ -13,10 +19,9 @@ export function BattleField(props) {
   const handleCellTouch = (args) => {
     const { row, cell, action } = args;
     if (action === 'add') setShipCoord((coords) => [...coords, { row, cell }]);
-    if (action === 'remove') setShipCoord((coords) => coords.filter((item) => item.row !== row && item.cell !== cell));
+    if (action === 'remove')
+      setShipCoord((coords) => coords.filter((item) => `${item.row}.${item.cell}` !== `${row}.${cell}`));
   };
-
-  console.dir(shipCoords);
 
   return (
     <main className={`${clss}`}>
@@ -25,8 +30,16 @@ export function BattleField(props) {
           return (
             <div className='cell-row' key={row.id}>
               {row.cells.map((cell) => {
-                const id = `${row.id}.${cell.id}`;
-                return <Cell key={id} name={id} touchHandler={handleCellTouch} />;
+                return (
+                  <Cell
+                    key={`${row.id}.${cell.id}`}
+                    row={row.id}
+                    cell={cell.id}
+                    ship={cell.ship}
+                    touchHandler={handleCellTouch}
+                    shipCoords={shipCoords}
+                  />
+                );
               })}
             </div>
           );

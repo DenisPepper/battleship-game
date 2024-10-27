@@ -2,9 +2,12 @@
  * @typedef {Object} Input
  */
 
+import { Ship } from './ship.js';
+
 export class BattleField {
+  #maxCount = { oneDeck: 4, twoDeck: 3, threeDeck: 2, fourDeck: 1 };
   #rows = [];
-  #ships = {};
+  #ships = [];
 
   constructor() {
     this.init();
@@ -13,16 +16,21 @@ export class BattleField {
   init = () => {
     const buildRow = (number) => ({
       id: number,
-      cells: Array.from({ length: 10 }, (_, i) => ({ id: i + 1, ship: '' })),
+      cells: Array.from({ length: 10 }, (_, i) => ({ id: i + 1, ship: null })),
     });
     this.#rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(buildRow);
+  };
 
-    this.#ships = {
-      1: { count: 0, maxCount: 4 },
-      2: { count: 0, maxCount: 3 },
-      3: { count: 0, maxCount: 2 },
-      4: { count: 0, maxCount: 1 },
-    };
+  addShip = (length, coords) => {
+    if (!length || !coords) return;
+
+    const ship = new Ship(length, coords);
+    for (const coord of coords) {
+      const cell = this.#rows.find((row) => row.id === coord.row).cells.find((cell) => cell.id === coord.cell);
+      cell.ship = ship;
+    }
+
+    this.#ships.push(ship);
   };
 
   getRows = () => [...this.#rows];
@@ -71,5 +79,11 @@ export class BattleField {
   };
 }
 
-//const field = new BattleField();
-//console.log(field.getRows());
+/*const field = new BattleField();
+field.addShip(4, [
+  { row: 1, cell: 1 },
+  { row: 1, cell: 2 },
+  { row: 1, cell: 3 },
+  { row: 1, cell: 4 },
+]);
+console.log(field.print(1)); */
