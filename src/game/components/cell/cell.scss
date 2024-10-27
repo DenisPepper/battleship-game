@@ -4,7 +4,11 @@
   background-color: var(--color-font-primary);
   color: var(--color-blue-dark);
 
-  &--with-ship {
+  &--nearby {
+    opacity: 0.7;
+  }
+
+  &--ship {
     background-color: cornflowerblue;
   }
 

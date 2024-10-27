@@ -6,10 +6,10 @@ import { BattleField as Field } from '/src/game/util/battle-field.js';
 
 const field = new Field();
 field.addShip(4, [
-  { row: 1, cell: 1 },
-  { row: 1, cell: 2 },
-  { row: 1, cell: 3 },
-  { row: 1, cell: 4 },
+  { row: 3, cell: 4 },
+  { row: 3, cell: 5 },
+  { row: 3, cell: 6 },
+  { row: 3, cell: 7 },
 ]);
 
 export function BattleField(props) {
@@ -36,6 +36,7 @@ export function BattleField(props) {
                     row={row.id}
                     cell={cell.id}
                     ship={cell.ship}
+                    nearby={cell.nearby}
                     touchHandler={handleCellTouch}
                     shipCoords={shipCoords}
                   />

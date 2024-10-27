@@ -4,6 +4,8 @@ export class Ship {
   #length = '';
   #coords = [];
 
+  static type = (length) => names[length - 1];
+
   constructor(length, coords) {
     this.#length = names[length - 1];
     this.#coords = coords;
