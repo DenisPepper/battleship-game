@@ -27,6 +27,8 @@ export class BattleField {
     this.#rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(buildRow);
   };
 
+  getRows = () => [...this.#rows];
+
   #getCell = (coord) => this.#rows.find((row) => row.id === coord.row).cells.find((cell) => cell.id === coord.cell);
 
   #placeShipToCell = (ship, coord) => {
@@ -70,8 +72,10 @@ export class BattleField {
   addShip = (coords, length) => {
     if (!length || !coords) return;
 
-    const { count, maxCount, items } = this.#ships[Ship.type(length)];
-    if (count >= maxCount) return;
+    const shipsGroup = this.#ships[Ship.type(length)];
+    if (!shipsGroup || shipsGroup.count >= shipsGroup.maxCount) return;
+
+    if (!this.isValid(coords)) return;
 
     const ship = new Ship(length, coords);
     for (const coord of coords) {
@@ -79,11 +83,11 @@ export class BattleField {
       this.#placeShipToCell(ship, coord);
     }
 
-    this.#ships[Ship.type(length)].count += 1;
-    items.push(ship);
+    shipsGroup.count += 1;
+    shipsGroup.items.push(ship);
   };
 
-  getRows = () => [...this.#rows];
+  removeShip = (ship) => {};
 
   print = (number) => {
     if (!number) console.dir(this.#rows);
@@ -96,18 +100,18 @@ export class BattleField {
 
   /**
    * Проверяет вертикальное, неразрывное положение ячеек в массиве.
-   * @param {Input[]} input - Массив с данными о ячейках, выбранных пользователем.
+   * @param {Input[]} coords - Массив с данными о ячейках, выбранных пользователем.
    * @returns {boolean}
    */
-  isValidVertical = (input) => {
-    if (input.length === 0 || input.length > MAX_DECK) return false;
+  isValidVertical = (coords) => {
+    if (coords.length === 0 || coords.length > MAX_DECK) return false;
 
-    if (input.length === 1) return true;
+    if (coords.length === 1) return true;
 
-    input.sort((a, b) => a.row - b.row);
-    for (let i = 1; i < input.length; i++) {
-      if (input[i - 1].row + 1 !== input[i].row) return false;
-      if (input[i - 1].cell !== input[i].cell) return false;
+    coords.sort((a, b) => a.row - b.row);
+    for (let i = 1; i < coords.length; i++) {
+      if (coords[i - 1].row + 1 !== coords[i].row) return false;
+      if (coords[i - 1].cell !== coords[i].cell) return false;
     }
 
     return true;
@@ -115,21 +119,25 @@ export class BattleField {
 
   /**
    * Проверяет горизонтальное, неразрывное положение ячеек в массиве.
-   * @param {Input[]} input - Массив с данными о ячейках, выбранных пользователем.
+   * @param {Input[]} coords - Массив с данными о ячейках, выбранных пользователем.
    * @returns {boolean}
    */
-  isValidHorizontal = (input) => {
-    if (input.length === 0 || input.length > MAX_DECK) return false;
+  isValidHorizontal = (coords) => {
+    if (coords.length === 0 || coords.length > MAX_DECK) return false;
 
-    if (input.length === 1) return true;
+    if (coords.length === 1) return true;
 
-    input.sort((a, b) => a.cell - b.cell);
-    for (let i = 1; i < input.length; i++) {
-      if (input[i - 1].cell + 1 !== input[i].cell) return false;
-      if (input[i - 1].row !== input[i].row) return false;
+    coords.sort((a, b) => a.cell - b.cell);
+    for (let i = 1; i < coords.length; i++) {
+      if (coords[i - 1].cell + 1 !== coords[i].cell) return false;
+      if (coords[i - 1].row !== coords[i].row) return false;
     }
 
     return true;
+  };
+
+  isValid = (coords) => {
+    return this.isValidVertical(coords) || this.isValidHorizontal(coords);
   };
 }
 
