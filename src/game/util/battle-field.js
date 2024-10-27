@@ -4,6 +4,8 @@
 
 import { Ship } from './ship.js';
 
+const MAX_DECK = 4;
+
 export class BattleField {
   #rows = [];
   #ships = {
@@ -98,7 +100,7 @@ export class BattleField {
    * @returns {boolean}
    */
   isValidVertical = (input) => {
-    if (input.length === 0) return false;
+    if (input.length === 0 || input.length > MAX_DECK) return false;
 
     if (input.length === 1) return true;
 
@@ -117,7 +119,7 @@ export class BattleField {
    * @returns {boolean}
    */
   isValidHorizontal = (input) => {
-    if (input.length === 0) return false;
+    if (input.length === 0 || input.length > MAX_DECK) return false;
 
     if (input.length === 1) return true;
 
